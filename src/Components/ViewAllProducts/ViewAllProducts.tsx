@@ -1,5 +1,10 @@
+import Navbar from "../Navbar/Navbar";
+
 export default function ViewAllProducts() {
   return (
-    <div></div>
+    <div>
+        <Navbar />
+    </div>
   )
 }
+ 
