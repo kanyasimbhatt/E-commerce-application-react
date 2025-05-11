@@ -15,6 +15,15 @@ import { z } from "zod";
 import { red } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
 
+type User = {
+  id: string,
+  name: string, 
+  email: string,
+  phoneNumber: string,
+  password: string
+  
+}
+
 const schema = z.object({
   name: z
     .string()
@@ -58,6 +67,8 @@ export default function SignUp() {
     resolver: zodResolver(schema),
   });
 
+
+
   const slotPropsForPassword = {
     input: {
       endAdornment: (
@@ -83,8 +94,11 @@ export default function SignUp() {
   };
 
   const onSubmit: SubmitHandler<UserFormField> = (data) => {
-    let users = JSON.parse(localStorage.getItem("users-array") as string);
-    users.push({ ...data, id: crypto.randomUUID() });
+    let users: Array<User> = JSON.parse(localStorage.getItem("users-array") as string) || [];
+    let id = crypto.randomUUID();
+    users.push({ ...data, id: id });
+    localStorage.setItem('users-array', JSON.stringify(users));
+    localStorage.setItem('user-id', id);
     navigate("/");
   };
 
@@ -95,52 +109,59 @@ export default function SignUp() {
         spacing={3}
         maxWidth={"600px"}
         margin={"auto"}
-        paddingLeft={"40px"}
-        paddingRight={"40px"}
-        paddingTop={"100px"}
+        marginTop={"80px"}
+        padding={"80px"}
+        boxShadow={"0px 0px 20px gray"}
+        borderRadius={"7px"}
       >
         <Typography variant="h4" textAlign={"center"}>
           Sign Up
         </Typography>
-        <TextField
-          {...register("name")}
-          type="text"
-          label="Full Name"
-          variant="outlined"
-          color="primary"
-          size="medium"
-          required
-        ></TextField>
-        {errors.name && (
-          <Typography color={red[500]}>{errors.name.message}</Typography>
-        )}
-        <TextField
-          {...register("email")}
-          type="email"
-          label="Email"
-          variant="outlined"
-          color="primary"
-          size="medium"
-          required
-        ></TextField>
-        {errors.email && (
-          <Typography color={red[500]}>{errors.email.message}</Typography>
-        )}
+        <Stack>
+          <TextField
+            {...register("name")}
+            type="text"
+            label="Full Name"
+            variant="outlined"
+            color="primary"
+            size="medium"
+            required
+          ></TextField>
+          {errors.name && (
+            <Typography color={red[500]}>{errors.name.message}</Typography>
+          )}
+        </Stack>
 
-        <TextField
-          {...register("phoneNumber")}
-          type="text"
-          label="Phone Number"
-          variant="outlined"
-          color="primary"
-          slotProps={slotPropsForPhoneNumber}
-          size="medium"
-          required
-        ></TextField>
-        {errors.phoneNumber && (
-          <Typography color={red[500]}>{errors.phoneNumber.message}</Typography>
-        )}
-
+        <Stack>
+          <TextField
+            {...register("email")}
+            type="email"
+            label="Email"
+            variant="outlined"
+            color="primary"
+            size="medium"
+            required
+          ></TextField>
+          {errors.email && (
+            <Typography color={red[500]}>{errors.email.message}</Typography>
+          )}
+        </Stack>
+        <Stack>
+          <TextField
+            {...register("phoneNumber")}
+            type="text"
+            label="Phone Number"
+            variant="outlined"
+            color="primary"
+            slotProps={slotPropsForPhoneNumber}
+            size="medium"
+            required
+          ></TextField>
+          {errors.phoneNumber && (
+            <Typography color={red[500]}>{errors.phoneNumber.message}</Typography>
+          )}
+        </Stack>
+        <Stack>
         <TextField
           {...register("password")}
           type={showPassword ? "text" : "password"}
@@ -155,6 +176,8 @@ export default function SignUp() {
         {errors.password && (
           <Typography color={red[500]}>{errors.password.message}</Typography>
         )}
+        </Stack>
+        <Stack>
         <Button
           type="submit"
           variant="contained"
@@ -164,6 +187,8 @@ export default function SignUp() {
         >
           {isSubmitting ? "Loading..." : "Sign Up"}
         </Button>
+        <Typography variant="subtitle2" color="gray">Already a user: <a href="/login">Login</a></Typography>
+        </Stack>
       </Stack>
     </form>
   );
