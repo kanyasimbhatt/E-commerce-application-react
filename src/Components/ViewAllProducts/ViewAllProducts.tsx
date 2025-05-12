@@ -4,6 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import { Typography, Card, Button, Stack } from "@mui/material";
 import Navbar from "../Navbar/Navbar";
+import { useNavigate } from "react-router-dom";
 
 type Product = {
   id: number;
@@ -20,6 +21,7 @@ type InputObject = {
 
 export default function ViewAllProducts() {
   const [products, setProducts] = useState<Array<Product>>([]);
+  const navigate = useNavigate();
   async function getProducts() {
     try {
       const response = await fetch("https://dummyjson.com/products");
@@ -32,6 +34,9 @@ export default function ViewAllProducts() {
       console.log(err);
     }
   }
+
+  const handleClickOnProduct = (productId: string) =>
+    navigate(`/product/${productId}`);
 
   useEffect(() => {
     getProducts();
@@ -70,7 +75,12 @@ export default function ViewAllProducts() {
             </CardContent>
             <CardActions>
               <Button size="small">Share</Button>
-              <Button size="small">Learn More</Button>
+              <Button
+                size="small"
+                onClick={() => handleClickOnProduct(`${product.id}`)}
+              >
+                Learn More
+              </Button>
             </CardActions>
           </Card>
         ))}

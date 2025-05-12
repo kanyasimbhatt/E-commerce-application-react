@@ -4,6 +4,7 @@ import RouteProtection from "./Components/RouteProtection/RouteProtection";
 import ViewAllProducts from "./Components/ViewAllProducts/ViewAllProducts";
 import Login from "./Components/Login/Login";
 import SignUp from "./Components/SignUp/SignUp";
+import ViewProduct from "./Components/ViewProduct/ViewProduct";
 
 function App() {
   return (
@@ -12,6 +13,10 @@ function App() {
         <Routes>
           <Route path="/" element={<RouteProtection />}>
             <Route path="/" element={<ViewAllProducts />}></Route>
+            <Route
+              path="/product/:product-id"
+              element={<ViewProduct />}
+            ></Route>
           </Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<SignUp />}></Route>
