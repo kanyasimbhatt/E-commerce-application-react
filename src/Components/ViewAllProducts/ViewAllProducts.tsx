@@ -17,6 +17,8 @@ export type Product = {
   category: string;
   price: number;
   images: string[];
+  brand: string;
+  rating: number;
 };
 
 type InputObject = {

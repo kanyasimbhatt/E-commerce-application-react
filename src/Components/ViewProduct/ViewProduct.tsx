@@ -4,8 +4,9 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import type { Product } from "../ViewAllProducts/ViewAllProducts";
+import { Rating } from "@mui/material";
 import { Box } from "@mui/material";
+import type { Product } from "../ViewAllProducts/ViewAllProducts";
 import Navbar from "../Navbar/Navbar";
 
 export default function ViewProduct() {
@@ -82,9 +83,14 @@ export default function ViewProduct() {
             <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
               Price: ${productData?.price}
             </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
               Category: {productData?.category}
             </Typography>
+            <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
+              Brand: {productData?.brand}
+            </Typography>
+            <Rating name="read-only" value={productData?.rating ?? 0} precision={0.5} readOnly />
+           
           </CardContent>
         </Card>
       </Box>
