@@ -11,11 +11,13 @@ import Menu from "@mui/material/Menu";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { useNavigate } from "react-router-dom";
+import { Drawer, TextField } from "@mui/material";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [lightMode, setLightMode] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -30,11 +32,23 @@ export default function Navbar() {
     handleClose();
     navigate("/login");
   };
+
+  const toggleDrawer = (openValue: boolean) => () => {
+    setOpen(openValue);
+  };
+
+  const sidebarData = (
+    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+      <TextField></TextField>
+    </Box>
+  );
+
   return (
     <Box sx={{ flexGrow: 1, position: "fixed", top: 0, width: "100%" }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton
+            onClick={toggleDrawer(true)}
             size="large"
             edge="start"
             color="inherit"
@@ -43,6 +57,9 @@ export default function Navbar() {
           >
             <MenuIcon />
           </IconButton>
+          <Drawer open={open} onClose={toggleDrawer(false)}>
+            {sidebarData}
+          </Drawer>
           <Typography
             variant="h6"
             component="div"
