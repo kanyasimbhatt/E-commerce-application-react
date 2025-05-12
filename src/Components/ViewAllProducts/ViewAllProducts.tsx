@@ -10,7 +10,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Navbar from "../Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 
-type Product = {
+export type Product = {
   id: number;
   title: string;
   description: string;

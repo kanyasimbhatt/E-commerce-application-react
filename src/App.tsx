@@ -13,10 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<RouteProtection />}>
             <Route path="/" element={<ViewAllProducts />}></Route>
-            <Route
-              path="/product/:product-id"
-              element={<ViewProduct />}
-            ></Route>
+            <Route path="/product/:productId" element={<ViewProduct />}></Route>
           </Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<SignUp />}></Route>
