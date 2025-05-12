@@ -48,10 +48,11 @@ export default function ViewAllProducts() {
         gap={"50px"}
         justifyContent={"center"}
         marginTop={"100px"}
+        marginBottom={"50px"}
       >
         {products.map((product: Product) => (
           <Card
-            sx={{ maxWidth: 345, boxShadow: "0 0 10px  #bfbfbf" }}
+            sx={{ maxWidth: 300, boxShadow: "0 0 10px  #bfbfbf" }}
             key={product.id}
           >
             <CardMedia
@@ -59,7 +60,7 @@ export default function ViewAllProducts() {
               image={product.images[0]}
               title={product.title}
             />
-            <CardContent>
+            <CardContent sx={{ height: 160 }}>
               <Typography gutterBottom variant="h5" component="div">
                 {product.title}
               </Typography>
