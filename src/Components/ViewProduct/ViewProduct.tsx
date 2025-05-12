@@ -36,29 +36,50 @@ export default function ViewProduct() {
       <Navbar />
       <Box
         sx={{
-          width: "100%",
-          height: "100vh",
+          maxWidth: "100%",
+          minHeight: "90vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          padding: 2,
         }}
       >
-        <Card sx={{ maxWidth: 345 }}>
+        <Card
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            maxWidth: 900,
+            width: "100%",
+            boxShadow: 3,
+          }}
+        >
           <CardMedia
             component="img"
-            height="540"
-            width="950"
+            sx={{
+              width: { xs: "100%", md: 400 },
+              height: { xs: 250, md: "auto" },
+              objectFit: "cover",
+            }}
             image={productData?.images[0]}
-            alt="green iguana"
+            alt={productData?.title}
           />
-          <CardContent>
+
+          <CardContent
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              padding: 3,
+              flex: 1,
+            }}
+          >
             <Typography gutterBottom variant="h5" component="div">
               {productData?.title}
             </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
               {productData?.description}
             </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
               Price: ${productData?.price}
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
