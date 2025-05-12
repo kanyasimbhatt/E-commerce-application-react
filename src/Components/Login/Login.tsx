@@ -12,20 +12,19 @@ import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { red } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
 
 type User = {
-  id: string,
-  name: string,
-  email: string,
-  phoneNumber: string,
-  password: string
-}
+  id: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+};
 
 const schema = z.object({
   email: z.string().email(),
-  password: z.string()
+  password: z.string(),
 });
 
 type UserFormField = z.infer<typeof schema>;
@@ -47,8 +46,6 @@ export default function SignUp() {
     resolver: zodResolver(schema),
   });
 
-
-
   const slotPropsForPassword = {
     input: {
       endAdornment: (
@@ -68,25 +65,23 @@ export default function SignUp() {
   };
 
   const onSubmit: SubmitHandler<UserFormField> = (data) => {
-    let users = JSON.parse(localStorage.getItem('users-array') as string);
+    const users = JSON.parse(localStorage.getItem("users-array") as string);
     const index = users.findIndex((user: User) => user.email === data.email);
     if (index === -1) {
-      setError('root', {
-        type: 'authentication',
-        message: 'Enter a correct email ID'
+      setError("root", {
+        type: "authentication",
+        message: "Enter a correct email ID",
       });
       return;
     }
 
     if (users[index].password === data.password) {
-      localStorage.setItem('user-id', users[index].id)
-      navigate('/')
-    }
-
-    else {
-      setError('root', {
-        type: 'authentication',
-        message: 'Enter correct password'
+      localStorage.setItem("user-id", users[index].id);
+      navigate("/");
+    } else {
+      setError("root", {
+        type: "authentication",
+        message: "Enter correct password",
       });
     }
   };
@@ -106,7 +101,6 @@ export default function SignUp() {
         <Typography variant="h4" textAlign={"center"}>
           Login
         </Typography>
-
 
         <TextField
           {...register("email")}
@@ -142,10 +136,10 @@ export default function SignUp() {
           {errors.root && (
             <Typography color="red">{errors.root.message}</Typography>
           )}
-          <Typography variant="subtitle2" color="gray">A new User: <a href="/signup">Sign Up</a></Typography>
-
+          <Typography variant="subtitle2" color="gray">
+            A new User: <a href="/signup">Sign Up</a>
+          </Typography>
         </Stack>
-
       </Stack>
     </form>
   );
