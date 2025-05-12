@@ -16,13 +16,12 @@ import { red } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
 
 type User = {
-  id: string,
-  name: string, 
-  email: string,
-  phoneNumber: string,
-  password: string
-  
-}
+  id: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+};
 
 const schema = z.object({
   name: z
@@ -65,9 +64,8 @@ export default function SignUp() {
     formState: { errors, isSubmitting },
   } = useForm<UserFormField>({
     resolver: zodResolver(schema),
+    mode: "onChange",
   });
-
-
 
   const slotPropsForPassword = {
     input: {
@@ -94,11 +92,12 @@ export default function SignUp() {
   };
 
   const onSubmit: SubmitHandler<UserFormField> = (data) => {
-    let users: Array<User> = JSON.parse(localStorage.getItem("users-array") as string) || [];
-    let id = crypto.randomUUID();
+    const users: Array<User> =
+      JSON.parse(localStorage.getItem("users-array") as string) || [];
+    const id = crypto.randomUUID();
     users.push({ ...data, id: id });
-    localStorage.setItem('users-array', JSON.stringify(users));
-    localStorage.setItem('user-id', id);
+    localStorage.setItem("users-array", JSON.stringify(users));
+    localStorage.setItem("user-id", id);
     navigate("/");
   };
 
@@ -158,36 +157,40 @@ export default function SignUp() {
             required
           ></TextField>
           {errors.phoneNumber && (
-            <Typography color={red[500]}>{errors.phoneNumber.message}</Typography>
+            <Typography color={red[500]}>
+              {errors.phoneNumber.message}
+            </Typography>
           )}
         </Stack>
         <Stack>
-        <TextField
-          {...register("password")}
-          type={showPassword ? "text" : "password"}
-          label="Password"
-          slotProps={slotPropsForPassword}
-          variant="outlined"
-          color="primary"
-          size="medium"
-          helperText="Do not share your password with anyone"
-          required
-        ></TextField>
-        {errors.password && (
-          <Typography color={red[500]}>{errors.password.message}</Typography>
-        )}
+          <TextField
+            {...register("password")}
+            type={showPassword ? "text" : "password"}
+            label="Password"
+            slotProps={slotPropsForPassword}
+            variant="outlined"
+            color="primary"
+            size="medium"
+            helperText="Do not share your password with anyone"
+            required
+          ></TextField>
+          {errors.password && (
+            <Typography color={red[500]}>{errors.password.message}</Typography>
+          )}
         </Stack>
         <Stack>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          size="large"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Loading..." : "Sign Up"}
-        </Button>
-        <Typography variant="subtitle2" color="gray">Already a user: <a href="/login">Login</a></Typography>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            size="large"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Loading..." : "Sign Up"}
+          </Button>
+          <Typography variant="subtitle2" color="gray">
+            Already a user: <a href="/login">Login</a>
+          </Typography>
         </Stack>
       </Stack>
     </form>
