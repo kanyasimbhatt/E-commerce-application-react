@@ -15,7 +15,7 @@ import { z } from "zod";
 import { red } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
 
-type User = {
+export type User = {
   id: string;
   name: string;
   email: string;

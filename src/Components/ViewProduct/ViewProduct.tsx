@@ -88,7 +88,6 @@ export default function ViewProduct() {
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
               Brand: {productData?.brand}
-
             </Typography>
             <Rating name="read-only" value={productData?.rating ?? 0} precision={0.5} readOnly />
           </CardContent>

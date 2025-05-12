@@ -23,6 +23,7 @@ export default function Navbar() {
 
   const handleClose = () => {
     setAnchorEl(null);
+    navigate('/profile')
   };
 
   const handleLogout = () => {
