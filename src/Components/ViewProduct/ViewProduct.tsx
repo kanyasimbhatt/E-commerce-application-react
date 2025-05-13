@@ -43,7 +43,6 @@ export default function ViewProduct() {
     const demoFavorites = [...favorites];
     demoFavorites.push(productData!);
     localStorage.setItem("favorites-array", JSON.stringify(demoFavorites));
-
     setFavorites(demoFavorites);
     setAddFavorite((fav) => !fav);
     setTimeout(() => {

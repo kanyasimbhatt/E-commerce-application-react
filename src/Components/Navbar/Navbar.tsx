@@ -31,6 +31,10 @@ export default function Navbar() {
     handleClose();
     navigate("/login");
   };
+
+  const handleClickOnFavorites = () => {
+    navigate("/favorites");
+  };
   return (
     <Box sx={{ flexGrow: 1, position: "fixed", top: 0, width: "100%" }}>
       <AppBar position="static">
@@ -62,9 +66,10 @@ export default function Navbar() {
               {lightMode ? <LightModeIcon /> : <DarkModeIcon />}
             </IconButton>
 
-            <IconButton>
+            <IconButton onClick={handleClickOnFavorites}>
               <FavoriteIcon sx={{ color: "white" }} />
             </IconButton>
+
             <IconButton
               size="large"
               aria-label="account of current user"

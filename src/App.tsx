@@ -5,6 +5,7 @@ import { ViewAllProductsWrapper } from "./Components/ViewAllProducts/ViewAllProd
 import Login from "./Components/Login/Login";
 import SignUp from "./Components/SignUp/SignUp";
 import ViewProduct from "./Components/ViewProduct/ViewProduct";
+import ViewFavorites from "./Components/ViewFavorite/ViewFavorites";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<RouteProtection />}>
             <Route path="/" element={<ViewAllProductsWrapper />}></Route>
             <Route path="/product/:productId" element={<ViewProduct />}></Route>
+            <Route path="/favorites" element={<ViewFavorites />}></Route>
           </Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<SignUp />}></Route>
