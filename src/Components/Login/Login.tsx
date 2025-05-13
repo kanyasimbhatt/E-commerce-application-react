@@ -5,15 +5,16 @@ import {
   InputAdornment,
   Stack,
   IconButton,
-} from "@mui/material";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { useState } from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useNavigate } from "react-router-dom";
-import { type User } from "../Types/UserType";
+} from '@mui/material';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useState } from 'react';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useNavigate } from 'react-router-dom';
+import { type User } from '../Types/UserType';
+import { getData } from '../../Store/Store';
 
 const schema = z.object({
   email: z.string().email(),
@@ -45,7 +46,7 @@ export const Login = () => {
         <InputAdornment position="end">
           <IconButton
             aria-label={
-              showPassword ? "hide the password" : "display the password"
+              showPassword ? 'hide the password' : 'display the password'
             }
             onClick={handleClickOnShowPassword}
             edge="end"
@@ -58,23 +59,23 @@ export const Login = () => {
   };
 
   const onSubmit: SubmitHandler<UserFormField> = (data) => {
-    const users = JSON.parse(localStorage.getItem("users-array") as string);
+    const users = getData();
     const index = users.findIndex((user: User) => user.email === data.email);
+    const userData = users[index];
     if (index === -1) {
-      setError("root", {
-        type: "authentication",
-        message: "Email ID not found",
+      setError('root', {
+        type: 'authentication',
+        message: 'Email ID not found',
       });
       return;
     }
-
-    if (users[index].password === data.password) {
-      localStorage.setItem("user-id", users[index].id);
-      navigate("/");
+    if (userData.password === data.password) {
+      localStorage.setItem('user-id', userData.id);
+      navigate('/');
     } else {
-      setError("root", {
-        type: "authentication",
-        message: "Enter the correct password",
+      setError('root', {
+        type: 'authentication',
+        message: 'Enter the correct password',
       });
     }
   };
@@ -82,21 +83,21 @@ export const Login = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack
-        direction={"column"}
+        direction={'column'}
         spacing={3}
-        maxWidth={"600px"}
-        margin={"auto"}
-        marginTop={"80px"}
-        padding={"80px"}
-        boxShadow={"0px 0px 20px gray"}
-        borderRadius={"7px"}
+        maxWidth={'600px'}
+        margin={'auto'}
+        marginTop={'80px'}
+        padding={'80px'}
+        boxShadow={'0px 0px 20px gray'}
+        borderRadius={'7px'}
       >
-        <Typography variant="h4" textAlign={"center"}>
+        <Typography variant="h4" textAlign={'center'}>
           Login
         </Typography>
 
         <TextField
-          {...register("email")}
+          {...register('email')}
           type="email"
           label="Email"
           variant="outlined"
@@ -106,8 +107,8 @@ export const Login = () => {
         ></TextField>
 
         <TextField
-          {...register("password")}
-          type={showPassword ? "text" : "password"}
+          {...register('password')}
+          type={showPassword ? 'text' : 'password'}
           label="Password"
           slotProps={slotPropsForPassword}
           variant="outlined"
@@ -124,7 +125,7 @@ export const Login = () => {
             size="large"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Loading..." : "Login"}
+            {isSubmitting ? 'Loading...' : 'Login'}
           </Button>
           {errors.root && (
             <Typography color="red">{errors.root.message}</Typography>
