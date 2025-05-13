@@ -10,6 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
@@ -59,6 +60,10 @@ export default function Navbar() {
               onClick={() => setLightMode((light) => !light)}
             >
               {lightMode ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
+
+            <IconButton>
+              <FavoriteIcon sx={{ color: "white" }} />
             </IconButton>
             <IconButton
               size="large"

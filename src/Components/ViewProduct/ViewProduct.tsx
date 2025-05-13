@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Rating } from "@mui/material";
+import { Button, Rating, Stack } from "@mui/material";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import type { Product } from "../ViewAllProducts/ViewAllProducts";
 import { Box } from "@mui/material";
 import Navbar from "../Navbar/Navbar";
@@ -12,6 +15,8 @@ import Navbar from "../Navbar/Navbar";
 export default function ViewProduct() {
   const { productId } = useParams();
   const [productData, setProductData] = useState<Product>();
+  const navigate = useNavigate();
+  const [addFavorite, setAddFavorite] = useState(false);
   const getProductDetails = async () => {
     try {
       const response = await fetch(
@@ -26,6 +31,18 @@ export default function ViewProduct() {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleClickOnBack = () => {
+    navigate("/");
+  };
+
+  const handleClickOnFavorite = () => {
+    setAddFavorite((fav) => !fav);
+
+    setTimeout(() => {
+      setAddFavorite((fav) => !fav);
+    }, 3000);
   };
 
   useEffect(() => {
@@ -88,9 +105,37 @@ export default function ViewProduct() {
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
               Brand: {productData?.brand}
-
             </Typography>
-            <Rating name="read-only" value={productData?.rating ?? 0} precision={0.5} readOnly />
+            <Rating
+              name="read-only"
+              value={productData?.rating ?? 0}
+              precision={0.5}
+              readOnly
+            />
+
+            <Stack direction={"row"} gap={2} mt={2}>
+              <Button
+                size="small"
+                variant="contained"
+                sx={{ display: "flex", alignItems: "center", gap: "10px" }}
+                onClick={handleClickOnBack}
+              >
+                Go Back <ExitToAppIcon fontSize="small" />
+              </Button>
+              <Button
+                size="small"
+                variant="contained"
+                sx={{ display: "flex", alignItems: "center", gap: "10px" }}
+                onClick={handleClickOnFavorite}
+              >
+                Add to Wishlist{" "}
+                {addFavorite ? (
+                  <CheckCircleRoundedIcon sx={{ color: "#57d446" }} />
+                ) : (
+                  <FavoriteIcon fontSize="small" />
+                )}
+              </Button>
+            </Stack>
           </CardContent>
         </Card>
       </Box>
