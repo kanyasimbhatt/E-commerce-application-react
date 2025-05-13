@@ -13,7 +13,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
-import { setData } from '../../Store/Store';
+import { setData } from '../../../Store/Store';
 
 const schema = z.object({
   id: z.string(),

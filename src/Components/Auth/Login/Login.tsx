@@ -13,8 +13,8 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
-import { type User } from '../Types/UserType';
-import { getData } from '../../Store/Store';
+import { type User } from '../../Types/UserType';
+import { getData } from '../../../Store/Store';
 
 const schema = z.object({
   email: z.string().email(),
