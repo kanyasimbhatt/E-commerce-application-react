@@ -13,14 +13,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  password: string;
-};
+import { type User } from "../Types/UserType";
 
 const schema = z.object({
   email: z.string().email(),
@@ -29,7 +22,7 @@ const schema = z.object({
 
 type UserFormField = z.infer<typeof schema>;
 
-export default function SignUp() {
+export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -70,7 +63,7 @@ export default function SignUp() {
     if (index === -1) {
       setError("root", {
         type: "authentication",
-        message: "Enter a correct email ID",
+        message: "Email ID not found",
       });
       return;
     }
@@ -81,7 +74,7 @@ export default function SignUp() {
     } else {
       setError("root", {
         type: "authentication",
-        message: "Enter correct password",
+        message: "Enter the correct password",
       });
     }
   };
@@ -143,4 +136,4 @@ export default function SignUp() {
       </Stack>
     </form>
   );
-}
+};

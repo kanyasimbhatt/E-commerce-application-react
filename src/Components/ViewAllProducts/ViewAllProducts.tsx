@@ -1,5 +1,3 @@
-export default function ViewAllProducts() {
-  return (
-    <div></div>
-  )
-}
+export const ViewAllProducts = () => {
+  return <div></div>;
+};

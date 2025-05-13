@@ -12,23 +12,15 @@ import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { red } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  password: string;
-};
+import { type User } from "../Types/UserType";
 
 const schema = z.object({
   name: z
     .string()
     .refine(
       (value) => /^[a-zA-Z]+\s+[a-zA-Z]+$/.test(value ?? ""),
-      "Please enter both firstname and lastname"
+      "Please enter both First Name and Last Name"
     ),
   email: z.string().email(),
   phoneNumber: z
@@ -44,13 +36,13 @@ const schema = z.object({
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(
           value ?? ""
         ),
-      `Enter Proper password having minimum 8 length, atleast 1 uppercase, 1 lowercase, 1 special character`
+      `Enter Proper password having minimum 8 length, at least 1 uppercase, 1 lowercase, 1 special character`
     ),
 });
 
 type UserFormField = z.infer<typeof schema>;
 
-export default function SignUp() {
+export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -127,7 +119,7 @@ export default function SignUp() {
             required
           ></TextField>
           {errors.name && (
-            <Typography color={red[500]}>{errors.name.message}</Typography>
+            <Typography color="error">{errors.name.message}</Typography>
           )}
         </Stack>
 
@@ -142,7 +134,7 @@ export default function SignUp() {
             required
           ></TextField>
           {errors.email && (
-            <Typography color={red[500]}>{errors.email.message}</Typography>
+            <Typography color="error">{errors.email.message}</Typography>
           )}
         </Stack>
         <Stack>
@@ -157,9 +149,7 @@ export default function SignUp() {
             required
           ></TextField>
           {errors.phoneNumber && (
-            <Typography color={red[500]}>
-              {errors.phoneNumber.message}
-            </Typography>
+            <Typography color="error">{errors.phoneNumber.message}</Typography>
           )}
         </Stack>
         <Stack>
@@ -175,7 +165,7 @@ export default function SignUp() {
             required
           ></TextField>
           {errors.password && (
-            <Typography color={red[500]}>{errors.password.message}</Typography>
+            <Typography color="error">{errors.password.message}</Typography>
           )}
         </Stack>
         <Stack>
@@ -195,4 +185,4 @@ export default function SignUp() {
       </Stack>
     </form>
   );
-}
+};
