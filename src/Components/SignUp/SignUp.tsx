@@ -51,6 +51,14 @@ export const SignUp = () => {
     setShowPassword((show) => !show);
   };
 
+  const defaultValue = {
+    id: '',
+    name: '',
+    email: '',
+    phoneNumber: '',
+    password: '',
+  };
+
   const {
     register,
     handleSubmit,
@@ -58,6 +66,7 @@ export const SignUp = () => {
   } = useForm<UserFormField>({
     resolver: zodResolver(schema),
     mode: 'onChange',
+    defaultValues: defaultValue,
   });
 
   const slotPropsForPassword = {

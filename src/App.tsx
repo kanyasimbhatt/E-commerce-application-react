@@ -1,9 +1,9 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import "./App.css";
-import { RouteProtection } from "./Components/RouteProtection/RouteProtection";
-import { ViewAllProducts } from "./Components/ViewAllProducts/ViewAllProducts";
-import { Login } from "./Components/Login/Login";
-import { SignUp } from "./Components/SignUp/SignUp";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import './App.css';
+import { RouteProtection } from './Components/RouteProtection/RouteProtection';
+import { ViewAllProducts } from './Components/ViewAllProducts/ViewAllProducts';
+import { Login } from './Components/Login/Login';
+import { SignUp } from './Components/SignUp/SignUp';
 
 function App() {
   return (

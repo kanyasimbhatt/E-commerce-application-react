@@ -5,7 +5,8 @@ export function getData() {
 }
 
 export function setData(userData: User) {
+  console.log(userData);
   const userArray = getData() || [];
   userArray.push(userData);
-  localStorage.setItem('users-array', userArray);
+  localStorage.setItem('users-array', JSON.stringify(userArray));
 }
