@@ -11,12 +11,14 @@ import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import type { Product } from "../ViewAllProducts/ViewAllProducts";
 import { Box } from "@mui/material";
 import Navbar from "../Navbar/Navbar";
+import { useFavorites } from "../FavoriteProvider";
 
 export default function ViewProduct() {
   const { productId } = useParams();
   const [productData, setProductData] = useState<Product>();
   const navigate = useNavigate();
   const [addFavorite, setAddFavorite] = useState(false);
+  const { favorites, setFavorites } = useFavorites();
   const getProductDetails = async () => {
     try {
       const response = await fetch(
@@ -38,8 +40,12 @@ export default function ViewProduct() {
   };
 
   const handleClickOnFavorite = () => {
-    setAddFavorite((fav) => !fav);
+    const demoFavorites = [...favorites];
+    demoFavorites.push(productData!);
+    localStorage.setItem("favorites-array", JSON.stringify(demoFavorites));
 
+    setFavorites(demoFavorites);
+    setAddFavorite((fav) => !fav);
     setTimeout(() => {
       setAddFavorite((fav) => !fav);
     }, 3000);
