@@ -13,7 +13,8 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
-import { setData } from '../../../Store/Store';
+import { getData, setData } from '../../../Store/Store';
+import type { User } from '../../Types/UserType';
 
 const schema = z.object({
   id: z.string(),
@@ -62,6 +63,7 @@ export const SignUp = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<UserFormField>({
     resolver: zodResolver(schema),
@@ -94,6 +96,15 @@ export const SignUp = () => {
   };
 
   const onSubmit: SubmitHandler<UserFormField> = (data) => {
+    const userArray = getData();
+    const present = userArray.some((user: User) => user.email === data.email);
+    if (present) {
+      setError('root', {
+        type: 'authentication',
+        message: 'Email Id Already Exists',
+      });
+      return;
+    }
     const id = crypto.randomUUID();
     setData({ ...data, id });
     localStorage.setItem('user-id', id);
@@ -175,6 +186,7 @@ export const SignUp = () => {
             <Typography color="error">{errors.password.message}</Typography>
           )}
         </Stack>
+
         <Stack>
           <Button
             type="submit"
@@ -185,6 +197,9 @@ export const SignUp = () => {
           >
             {isSubmitting ? 'Loading...' : 'Sign Up'}
           </Button>
+          {errors.root && (
+            <Typography color="error">{errors.root.message}</Typography>
+          )}
           <Typography variant="subtitle2" color="gray">
             Already a user: <a href="/login">Login</a>
           </Typography>
