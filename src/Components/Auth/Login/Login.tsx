@@ -5,22 +5,17 @@ import {
   InputAdornment,
   Stack,
   IconButton,
-} from "@mui/material";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { useState } from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useNavigate } from "react-router-dom";
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  password: string;
-};
+} from '@mui/material';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useState } from 'react';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useNavigate } from 'react-router-dom';
+import { type User } from '../../Types/UserType';
+import { getData } from '../../../Store/Store';
+import { useUsers } from '../userProvider';
 
 const schema = z.object({
   email: z.string().email(),
@@ -29,8 +24,9 @@ const schema = z.object({
 
 type UserFormField = z.infer<typeof schema>;
 
-export default function SignUp() {
+export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { setUserId } = useUsers();
   const navigate = useNavigate();
 
   const handleClickOnShowPassword = () => {
@@ -52,7 +48,7 @@ export default function SignUp() {
         <InputAdornment position="end">
           <IconButton
             aria-label={
-              showPassword ? "hide the password" : "display the password"
+              showPassword ? 'hide the password' : 'display the password'
             }
             onClick={handleClickOnShowPassword}
             edge="end"
@@ -65,23 +61,24 @@ export default function SignUp() {
   };
 
   const onSubmit: SubmitHandler<UserFormField> = (data) => {
-    const users = JSON.parse(localStorage.getItem("users-array") as string);
+    const users = getData();
     const index = users.findIndex((user: User) => user.email === data.email);
+    const userData = users[index];
     if (index === -1) {
-      setError("root", {
-        type: "authentication",
-        message: "Enter a correct email ID",
+      setError('root', {
+        type: 'authentication',
+        message: 'Email ID not found',
       });
       return;
     }
-
-    if (users[index].password === data.password) {
-      localStorage.setItem("user-id", users[index].id);
-      navigate("/");
+    if (userData.password === data.password) {
+      setUserId(userData.id);
+      localStorage.setItem('user-id', userData.id);
+      navigate('/');
     } else {
-      setError("root", {
-        type: "authentication",
-        message: "Enter correct password",
+      setError('root', {
+        type: 'authentication',
+        message: 'Enter the correct password',
       });
     }
   };
@@ -89,21 +86,21 @@ export default function SignUp() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack
-        direction={"column"}
+        direction={'column'}
         spacing={3}
-        maxWidth={"600px"}
-        margin={"auto"}
-        marginTop={"80px"}
-        padding={"80px"}
-        boxShadow={"0px 0px 20px gray"}
-        borderRadius={"7px"}
+        maxWidth={'600px'}
+        margin={'auto'}
+        marginTop={'80px'}
+        padding={'80px'}
+        boxShadow={'0px 0px 20px gray'}
+        borderRadius={'7px'}
       >
-        <Typography variant="h4" textAlign={"center"}>
+        <Typography variant="h4" textAlign={'center'}>
           Login
         </Typography>
 
         <TextField
-          {...register("email")}
+          {...register('email')}
           type="email"
           label="Email"
           variant="outlined"
@@ -113,8 +110,8 @@ export default function SignUp() {
         ></TextField>
 
         <TextField
-          {...register("password")}
-          type={showPassword ? "text" : "password"}
+          {...register('password')}
+          type={showPassword ? 'text' : 'password'}
           label="Password"
           slotProps={slotPropsForPassword}
           variant="outlined"
@@ -131,7 +128,7 @@ export default function SignUp() {
             size="large"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Loading..." : "Login"}
+            {isSubmitting ? 'Loading...' : 'Login'}
           </Button>
           {errors.root && (
             <Typography color="red">{errors.root.message}</Typography>
@@ -143,4 +140,4 @@ export default function SignUp() {
       </Stack>
     </form>
   );
-}
+};

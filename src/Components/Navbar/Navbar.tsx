@@ -10,6 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
@@ -30,6 +31,10 @@ export default function Navbar() {
     localStorage.removeItem("user-id");
     handleClose();
     navigate("/login");
+  };
+
+  const handleClickOnFavorites = () => {
+    navigate("/favorites");
   };
   return (
     <Box sx={{ flexGrow: 1, position: "fixed", top: 0, width: "100%" }}>
@@ -61,6 +66,11 @@ export default function Navbar() {
             >
               {lightMode ? <LightModeIcon /> : <DarkModeIcon />}
             </IconButton>
+
+            <IconButton onClick={handleClickOnFavorites}>
+              <FavoriteIcon sx={{ color: "white" }} />
+            </IconButton>
+
             <IconButton
               size="large"
               aria-label="account of current user"

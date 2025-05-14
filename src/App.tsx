@@ -1,11 +1,12 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import "./App.css";
-import RouteProtection from "./Components/RouteProtection/RouteProtection";
-import ViewAllProducts from "./Components/ViewAllProducts/ViewAllProducts";
-import Login from "./Components/Login/Login";
-import SignUp from "./Components/SignUp/SignUp";
-import ViewProduct from "./Components/ViewProduct/ViewProduct";
-import Profile from "./Components/Profile/Profile";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import './App.css';
+import { RouteProtection } from './Components/RouteProtection/RouteProtection';
+import { ViewAllProducts } from './Components/ViewAllProducts/ViewAllProducts';
+import { Login } from './Components/Auth/Login/Login';
+import { SignUp } from './Components/Auth/SignUp/SignUp';
+import { ViewProduct } from './Components/ViewProduct/ViewProduct';
+import ViewFavorites from './Components/ViewFavorite/ViewFavorites';
+import Profile from './Components/Profile/Profile';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<RouteProtection />}>
             <Route path="/" element={<ViewAllProducts />}></Route>
             <Route path="/product/:productId" element={<ViewProduct />}></Route>
+            <Route path="/favorites" element={<ViewFavorites />}></Route>
           </Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<SignUp />}></Route>
