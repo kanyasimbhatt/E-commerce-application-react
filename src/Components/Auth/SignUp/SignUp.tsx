@@ -15,6 +15,7 @@ import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { getData, setData } from '../../../Store/Store';
 import type { User } from '../../Types/UserType';
+import { useUsers } from '../../context/userProvider';
 
 const schema = z.object({
   id: z.string(),
@@ -47,6 +48,7 @@ type UserFormField = z.infer<typeof schema>;
 export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { setUserId } = useUsers();
 
   const handleClickOnShowPassword = () => {
     setShowPassword((show) => !show);
@@ -107,6 +109,7 @@ export const SignUp = () => {
     }
     const id = crypto.randomUUID();
     setData({ ...data, id });
+    setUserId(id);
     localStorage.setItem('user-id', id);
     navigate('/');
   };

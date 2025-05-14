@@ -15,6 +15,7 @@ import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { type User } from '../../Types/UserType';
 import { getData } from '../../../Store/Store';
+import { useUsers } from '../../context/userProvider';
 
 const schema = z.object({
   email: z.string().email(),
@@ -25,6 +26,7 @@ type UserFormField = z.infer<typeof schema>;
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { setUserId } = useUsers();
   const navigate = useNavigate();
 
   const handleClickOnShowPassword = () => {
@@ -70,6 +72,7 @@ export const Login = () => {
       return;
     }
     if (userData.password === data.password) {
+      setUserId(userData.id);
       localStorage.setItem('user-id', userData.id);
       navigate('/');
     } else {
