@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { RouteProtection } from './Components/RouteProtection/RouteProtection';
-import { ViewAllProductsWrapper } from './Components/ViewAllProducts/ViewAllProducts';
+import { ViewAllProducts } from './Components/ViewAllProducts/ViewAllProducts';
 import { Login } from './Components/Auth/Login/Login';
 import { SignUp } from './Components/Auth/SignUp/SignUp';
 import { ViewProduct } from './Components/ViewProduct/ViewProduct';
@@ -13,7 +13,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<RouteProtection />}>
-            <Route path="/" element={<ViewAllProductsWrapper />}></Route>
+            <Route path="/" element={<ViewAllProducts />}></Route>
             <Route path="/product/:productId" element={<ViewProduct />}></Route>
             <Route path="/favorites" element={<ViewFavorites />}></Route>
           </Route>

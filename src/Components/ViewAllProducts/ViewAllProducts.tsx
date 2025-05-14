@@ -9,7 +9,6 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Navbar from '../Navbar/Navbar';
 import { useNavigate } from 'react-router-dom';
-import { FavoritesProvider } from '../FavoriteProvider';
 
 export type Product = {
   id: number;
@@ -26,15 +25,7 @@ type InputObject = {
   products: Array<Product>;
 };
 
-export const ViewAllProductsWrapper = () => {
-  return (
-    <FavoritesProvider>
-      <ViewAllProducts />
-    </FavoritesProvider>
-  );
-};
-
-const ViewAllProducts = () => {
+export const ViewAllProducts = () => {
   const [products, setProducts] = useState<Array<Product>>([]);
   const navigate = useNavigate();
   const [showShare, setShowShare] = useState(false);

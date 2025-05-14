@@ -4,4 +4,5 @@ export type User = {
   email: string;
   phoneNumber: string;
   password: string;
+  favorites: User[];
 };

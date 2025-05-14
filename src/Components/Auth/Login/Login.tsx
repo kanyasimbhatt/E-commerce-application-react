@@ -15,7 +15,7 @@ import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { type User } from '../../Types/UserType';
 import { getData } from '../../../Store/Store';
-import { useUsers } from '../../context/userProvider';
+import { useUsers } from '../userProvider';
 
 const schema = z.object({
   email: z.string().email(),

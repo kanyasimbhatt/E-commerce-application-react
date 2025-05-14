@@ -11,14 +11,18 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import type { Product } from '../ViewAllProducts/ViewAllProducts';
 import { Box } from '@mui/material';
 import Navbar from '../Navbar/Navbar';
-import { useFavorites } from '../FavoriteProvider';
+import { useFavorite } from './FavoritesProvider';
+import { useUsers } from '../Auth/userProvider';
+import { getData, setData } from '../../Store/Store';
+import type { User } from '../Types/UserType';
 
 export const ViewProduct = () => {
   const { productId } = useParams();
+  const { userId } = useUsers();
   const [productData, setProductData] = useState<Product>();
   const navigate = useNavigate();
   const [addFavorite, setAddFavorite] = useState(false);
-  const { favorites, setFavorites } = useFavorites();
+  const { favorites, setFavorites } = useFavorite();
   const getProductDetails = async () => {
     try {
       const response = await fetch(
@@ -40,9 +44,13 @@ export const ViewProduct = () => {
   };
 
   const handleClickOnFavorite = () => {
-    const demoFavorites = [...favorites];
-    demoFavorites.push(productData!);
-    localStorage.setItem('favorites-array', JSON.stringify(demoFavorites));
+    const userArray = getData();
+    console.log(userId);
+    const userIndex = userArray.findIndex((user: User) => user.id === userId);
+    if (userIndex === -1) return;
+    const demoFavorites = [...favorites, productData!];
+    userArray[userIndex].favorites = demoFavorites;
+    setData(userArray);
     setFavorites(demoFavorites);
     setAddFavorite((fav) => !fav);
     setTimeout(() => {

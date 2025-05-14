@@ -15,7 +15,7 @@ import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { getData, setData } from '../../../Store/Store';
 import type { User } from '../../Types/UserType';
-import { useUsers } from '../../context/userProvider';
+import { useUsers } from '../userProvider';
 
 const schema = z.object({
   id: z.string(),
@@ -108,7 +108,7 @@ export const SignUp = () => {
       return;
     }
     const id = crypto.randomUUID();
-    setData({ ...data, id });
+    setData({ ...data, id, favorites: [] });
     setUserId(id);
     localStorage.setItem('user-id', id);
     navigate('/');
