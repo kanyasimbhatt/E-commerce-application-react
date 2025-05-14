@@ -45,13 +45,12 @@ export const ViewProduct = () => {
 
   const handleClickOnFavorite = () => {
     const userArray = getData();
-    console.log(userId);
     const userIndex = userArray.findIndex((user: User) => user.id === userId);
     if (userIndex === -1) return;
-    const demoFavorites = [...favorites, productData!];
-    userArray[userIndex].favorites = demoFavorites;
+    const demoFavorites = new Set([...favorites, productData!]);
+    userArray[userIndex].favorites = [...demoFavorites];
     setData(userArray);
-    setFavorites(demoFavorites);
+    setFavorites([...demoFavorites]);
     setAddFavorite((fav) => !fav);
     setTimeout(() => {
       setAddFavorite((fav) => !fav);

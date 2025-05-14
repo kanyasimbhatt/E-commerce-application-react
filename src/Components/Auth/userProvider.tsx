@@ -15,7 +15,7 @@ type ChildrenType = {
 };
 
 export const UserProvider: React.FC<ChildrenType> = ({ children }) => {
-  const userData = (localStorage.getItem('user-id') as string) || '';
+  const userData = localStorage.getItem('user-id') || '';
   const [userId, setUserId] = useState<string>(userData);
   return (
     <UserContext.Provider value={{ userId, setUserId }}>

@@ -4,14 +4,28 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, Stack } from '@mui/material';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import { useFavorite } from '../ViewProduct/FavoritesProvider';
 import Navbar from '../Navbar/Navbar';
+import { useUsers } from '../Auth/userProvider';
+import { getData, setData } from '../../Store/Store';
+import type { User } from '../Types/UserType';
+import { useFavorite } from '../ViewProduct/FavoritesProvider';
+import type { Product } from '../ViewAllProducts/ViewAllProducts';
 
 export default function ViewFavorites() {
-  const { favorites } = useFavorite();
+  const { userId } = useUsers();
+  const { favorites, setFavorites } = useFavorite();
 
-  const handleClickOnRemove = () => {
-    console.log('sdfsd');
+  const handleClickOnRemove = (favoriteId: number) => {
+    const userArray = getData();
+    const userIndex = userArray.findIndex((user: User) => user.id === userId);
+    const userData = userArray[userIndex];
+    if (!userData) return;
+    userData.favorites = userData.favorites.filter(
+      (product: Product) => +product.id !== favoriteId
+    );
+    userArray[userIndex] = { ...userData };
+    setData(userArray);
+    setFavorites([...userData.favorites]);
   };
   return (
     <div>
@@ -23,12 +37,15 @@ export default function ViewFavorites() {
         alignItems={'center'}
         marginTop={'100px'}
       >
+        {favorites.length === 0 && (
+          <Typography variant="h5">No Records Found</Typography>
+        )}
         {favorites.map((favorite) => (
           <Card
             sx={{
               display: 'flex',
               flexDirection: { xs: 'column', md: 'row' },
-              maxWidth: 1000,
+              maxWidth: 1200,
               boxShadow: 3,
             }}
             key={favorite.id}
@@ -36,8 +53,8 @@ export default function ViewFavorites() {
             <CardMedia
               component="img"
               sx={{
-                width: { xs: '100%', md: 400 },
-                height: { xs: 250, md: 'auto' },
+                width: { xs: 150, md: 200 },
+                height: { xs: 150, md: 'auto' },
                 objectFit: 'cover',
               }}
               image={favorite.images[0]}
@@ -68,23 +85,12 @@ export default function ViewFavorites() {
               >
                 Price: ${favorite.price}
               </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: 'text.secondary', mb: 1 }}
-              >
-                Category: {favorite.category}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: 'text.secondary', mb: 1 }}
-              >
-                Brand: {favorite.brand}
-              </Typography>
+
               <Button
                 size="small"
                 variant="contained"
                 sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}
-                onClick={handleClickOnRemove}
+                onClick={() => handleClickOnRemove(favorite.id)}
               >
                 Remove <RemoveCircleIcon fontSize="small" />
               </Button>

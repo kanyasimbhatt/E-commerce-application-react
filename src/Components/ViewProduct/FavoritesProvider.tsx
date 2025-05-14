@@ -21,7 +21,11 @@ type ChildrenType = {
 export const FavoriteProvider: React.FC<ChildrenType> = ({ children }) => {
   const { userId } = useUsers();
   const userArray = getData();
-  const userData = userArray.find((user: User) => user.id === userId) || [];
+  const demoObject = {
+    favorites: [],
+  };
+  const userData =
+    userArray.find((user: User) => user.id === userId) || demoObject;
   const [favorites, setFavorites] = useState<Product[]>(userData.favorites);
   return (
     <FavoriteContext.Provider value={{ favorites, setFavorites }}>

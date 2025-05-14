@@ -1,8 +1,10 @@
+import { type Product } from '../ViewAllProducts/ViewAllProducts';
+
 export type User = {
   id: string;
   name: string;
   email: string;
   phoneNumber: string;
   password: string;
-  favorites: User[];
+  favorites: Product[];
 };
