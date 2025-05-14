@@ -1,8 +1,9 @@
 import { Outlet, Navigate } from 'react-router-dom';
 import { UserProvider } from '../Auth/userProvider';
+import { getData } from '../Utils/Store';
 
 export const RouteProtection = () => {
-  const id = localStorage.getItem('user-id');
+  const id = getData('user-id');
   return (
     <>
       {id ? (
