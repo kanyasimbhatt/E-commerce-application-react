@@ -13,7 +13,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
-import { getData, setData } from '../../../Store/Store';
+import { getData, setData } from '../../Utils/Store';
 import type { User } from '../../Types/UserType';
 import { useUsers } from '../userProvider';
 
@@ -98,7 +98,7 @@ export const SignUp = () => {
   };
 
   const onSubmit: SubmitHandler<UserFormField> = (data) => {
-    const userArray = getData();
+    const userArray = getData('users-array') || [];
     const present = userArray.some((user: User) => user.email === data.email);
     if (present) {
       setError('root', {
@@ -108,9 +108,9 @@ export const SignUp = () => {
       return;
     }
     const id = crypto.randomUUID();
-    setData({ ...data, id });
+    setData<User>('users-array', { ...data, id, favorites: [] });
     setUserId(id);
-    localStorage.setItem('user-id', id);
+    setData<string>('user-id', id);
     navigate('/');
   };
 

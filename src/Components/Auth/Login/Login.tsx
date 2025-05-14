@@ -14,7 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { type User } from '../../Types/UserType';
-import { getData } from '../../../Store/Store';
+import { getData, setData } from '../../Utils/Store';
 import { useUsers } from '../userProvider';
 
 const schema = z.object({
@@ -61,7 +61,7 @@ export const Login = () => {
   };
 
   const onSubmit: SubmitHandler<UserFormField> = (data) => {
-    const users = getData();
+    const users = getData('users-array') || [];
     const userData = users.find((user: User) => user.email === data.email);
     if (!userData) {
       setError('root', {
@@ -72,7 +72,7 @@ export const Login = () => {
     }
     if (userData.password === data.password) {
       setUserId(userData.id);
-      localStorage.setItem('user-id', userData.id);
+      setData<string>('user-id', userData.id);
       navigate('/');
     } else {
       setError('root', {
