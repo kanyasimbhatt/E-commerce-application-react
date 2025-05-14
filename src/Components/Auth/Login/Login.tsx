@@ -62,9 +62,8 @@ export const Login = () => {
 
   const onSubmit: SubmitHandler<UserFormField> = (data) => {
     const users = getData();
-    const index = users.findIndex((user: User) => user.email === data.email);
-    const userData = users[index];
-    if (index === -1) {
+    const userData = users.find((user: User) => user.email === data.email);
+    if (!userData) {
       setError('root', {
         type: 'authentication',
         message: 'Email ID not found',
