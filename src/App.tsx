@@ -1,11 +1,11 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import "./App.css";
-import RouteProtection from "./Components/RouteProtection/RouteProtection";
-import { ViewAllProductsWrapper } from "./Components/ViewAllProducts/ViewAllProducts";
-import Login from "./Components/Login/Login";
-import SignUp from "./Components/SignUp/SignUp";
-import ViewProduct from "./Components/ViewProduct/ViewProduct";
-import ViewFavorites from "./Components/ViewFavorite/ViewFavorites";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import './App.css';
+import { RouteProtection } from './Components/RouteProtection/RouteProtection';
+import { ViewAllProductsWrapper } from './Components/ViewAllProducts/ViewAllProducts';
+import { Login } from './Components/Auth/Login/Login';
+import { SignUp } from './Components/Auth/SignUp/SignUp';
+import { ViewProduct } from './Components/ViewProduct/ViewProduct';
+import ViewFavorites from './Components/ViewFavorite/ViewFavorites';
 
 function App() {
   return (

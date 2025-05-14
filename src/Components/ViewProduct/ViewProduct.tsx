@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import { Button, Rating, Stack } from "@mui/material";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
-import type { Product } from "../ViewAllProducts/ViewAllProducts";
-import { Box } from "@mui/material";
-import Navbar from "../Navbar/Navbar";
-import { useFavorites } from "../FavoriteProvider";
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { Button, Rating, Stack } from '@mui/material';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import type { Product } from '../ViewAllProducts/ViewAllProducts';
+import { Box } from '@mui/material';
+import Navbar from '../Navbar/Navbar';
+import { useFavorites } from '../FavoriteProvider';
 
-export default function ViewProduct() {
+export const ViewProduct = () => {
   const { productId } = useParams();
   const [productData, setProductData] = useState<Product>();
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export default function ViewProduct() {
         `https://dummyjson.com/products/${productId}`
       );
       if (!response.ok) {
-        throw new Error("data was not fetched");
+        throw new Error('data was not fetched');
       }
 
       const data = await response.json();
@@ -36,13 +36,13 @@ export default function ViewProduct() {
   };
 
   const handleClickOnBack = () => {
-    navigate("/");
+    navigate('/');
   };
 
   const handleClickOnFavorite = () => {
     const demoFavorites = [...favorites];
     demoFavorites.push(productData!);
-    localStorage.setItem("favorites-array", JSON.stringify(demoFavorites));
+    localStorage.setItem('favorites-array', JSON.stringify(demoFavorites));
     setFavorites(demoFavorites);
     setAddFavorite((fav) => !fav);
     setTimeout(() => {
@@ -59,29 +59,29 @@ export default function ViewProduct() {
       <Navbar />
       <Box
         sx={{
-          maxWidth: "100%",
-          minHeight: "90vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          maxWidth: '100%',
+          minHeight: '90vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
           padding: 2,
         }}
       >
         <Card
           sx={{
-            display: "flex",
-            flexDirection: { xs: "column", md: "row" },
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
             maxWidth: 900,
-            width: "100%",
+            width: '100%',
             boxShadow: 3,
           }}
         >
           <CardMedia
             component="img"
             sx={{
-              width: { xs: "100%", md: 400 },
-              height: { xs: 250, md: "auto" },
-              objectFit: "cover",
+              width: { xs: '100%', md: 400 },
+              height: { xs: 250, md: 'auto' },
+              objectFit: 'cover',
             }}
             image={productData?.images[0]}
             alt={productData?.title}
@@ -89,9 +89,9 @@ export default function ViewProduct() {
 
           <CardContent
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
               padding: 3,
               flex: 1,
             }}
@@ -99,16 +99,16 @@ export default function ViewProduct() {
             <Typography gutterBottom variant="h5" component="div">
               {productData?.title}
             </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
+            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
               {productData?.description}
             </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
+            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
               Price: ${productData?.price}
             </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
+            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
               Category: {productData?.category}
             </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
+            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
               Brand: {productData?.brand}
             </Typography>
             <Rating
@@ -118,11 +118,11 @@ export default function ViewProduct() {
               readOnly
             />
 
-            <Stack direction={"row"} gap={2} mt={2}>
+            <Stack direction={'row'} gap={2} mt={2}>
               <Button
                 size="small"
                 variant="contained"
-                sx={{ display: "flex", alignItems: "center", gap: "10px" }}
+                sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}
                 onClick={handleClickOnBack}
               >
                 Go Back <ExitToAppIcon fontSize="small" />
@@ -130,12 +130,12 @@ export default function ViewProduct() {
               <Button
                 size="small"
                 variant="contained"
-                sx={{ display: "flex", alignItems: "center", gap: "10px" }}
+                sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}
                 onClick={handleClickOnFavorite}
               >
-                Add to Wishlist{" "}
+                Add to Wishlist{' '}
                 {addFavorite ? (
-                  <CheckCircleRoundedIcon sx={{ color: "#57d446" }} />
+                  <CheckCircleRoundedIcon sx={{ color: '#57d446' }} />
                 ) : (
                   <FavoriteIcon fontSize="small" />
                 )}
@@ -146,4 +146,4 @@ export default function ViewProduct() {
       </Box>
     </>
   );
-}
+};
