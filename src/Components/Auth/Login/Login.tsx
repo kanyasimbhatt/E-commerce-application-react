@@ -10,19 +10,15 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { type User } from '../../Types/UserType';
 import { getData, setData } from '../../Utils/Store';
 import { useUsers } from '../userProvider';
 
-const schema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
-
-type UserFormField = z.infer<typeof schema>;
+type UserFormField = {
+  email: string;
+  password: string;
+};
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -38,9 +34,7 @@ export const Login = () => {
     handleSubmit,
     setError,
     formState: { isSubmitting, errors },
-  } = useForm<UserFormField>({
-    resolver: zodResolver(schema),
-  });
+  } = useForm<UserFormField>();
 
   const slotPropsForPassword = {
     input: {
