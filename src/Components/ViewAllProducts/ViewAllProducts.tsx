@@ -9,6 +9,8 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Navbar from '../Navbar/Navbar';
 import { useNavigate } from 'react-router-dom';
+import { SidebarProvider } from './SidebarProvider';
+import { SidebarDrawer } from './SidebarDrawer';
 
 export type Product = {
   id: number;
@@ -21,16 +23,36 @@ export type Product = {
   rating: number;
 };
 
+export type RangeType = {
+  low: number;
+  high: number;
+};
+
 type InputObject = {
   products: Array<Product>;
 };
 
-export const ViewAllProducts = () => {
+export const ViewAllProductsWrapper = () => {
+  return (
+    <SidebarProvider>
+      <ViewAllProducts />
+    </SidebarProvider>
+  );
+};
+
+const rangeInitialValue = {
+  low: 0,
+  high: 100,
+};
+
+const ViewAllProducts = () => {
   const [products, setProducts] = useState<Array<Product>>([]);
-  const navigate = useNavigate();
+  const [range, setRange] = useState<RangeType>(rangeInitialValue);
+  const [categories, setCategories] = useState<Array<string>>([]);
   const [showShare, setShowShare] = useState(false);
   const [saveClipboard, setSaveClipboard] = useState(false);
   const [productIdSelected, setProductIdSelected] = useState(0);
+  const navigate = useNavigate();
   const matches1060 = useMediaQuery('(max-width:1060px)');
   const matches880 = useMediaQuery('(max-width:880px)');
 
@@ -74,6 +96,12 @@ export const ViewAllProducts = () => {
   return (
     <>
       <Navbar />
+      <SidebarDrawer
+        range={range}
+        setRange={setRange}
+        categories={categories}
+        setCategories={setCategories}
+      />
       <Stack
         display={'flex'}
         flexDirection={'row'}
