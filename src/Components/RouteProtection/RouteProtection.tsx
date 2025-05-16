@@ -1,17 +1,26 @@
 import { Outlet, Navigate } from 'react-router-dom';
 import { UserProvider } from '../Auth/userProvider';
-import { getData } from '../Utils/Store';
 
-export const RouteProtection = () => {
-  const id = getData('user-id');
+type ChildrenType = {
+  userId: string;
+};
+
+export const RouteProtectionWrapper = ({ userId }: ChildrenType) => {
+  return (
+    <UserProvider>
+      <RouteProtection userId={userId} />
+    </UserProvider>
+  );
+};
+
+const RouteProtection = ({ userId }: ChildrenType) => {
+  const newLocation = `${location}`;
   return (
     <>
-      {id ? (
-        <UserProvider>
-          <Outlet />{' '}
-        </UserProvider>
+      {userId ? (
+        <Outlet />
       ) : (
-        <Navigate to="/login" />
+        <Navigate to="/login" state={{ from: newLocation }} replace />
       )}
     </>
   );
