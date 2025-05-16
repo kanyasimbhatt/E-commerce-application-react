@@ -15,51 +15,23 @@ import {
 } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { useSidebar } from './SidebarProvider';
-import type { RangeType } from './ViewAllProducts';
+import type { FilterType } from './ViewAllProducts';
+import type { ChangeEvent } from 'react';
 
 type childrenType = {
-  range: RangeType;
-  setRange: React.Dispatch<React.SetStateAction<RangeType>>;
-  categories: Array<string>;
-  setCategories: React.Dispatch<React.SetStateAction<Array<string>>>;
+  filter: FilterType;
+  setFilter: React.Dispatch<React.SetStateAction<FilterType>>;
 };
 
-export const SidebarDrawer = ({
-  range,
-  setRange,
-  categories,
-  setCategories,
-}: childrenType) => {
+export const SidebarDrawer = ({ filter, setFilter }: childrenType) => {
   const { open, setOpen } = useSidebar();
   const drawerWidth = 350;
+
+  const sortByOptions = ['None', 'Name', 'Price', 'Rating'];
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-  type Option = {
-    value: string;
-    label: string;
-  };
-
-  const sortByOptions = [
-    {
-      value: 'None',
-      label: 'None',
-    },
-    {
-      value: 'Name',
-      label: 'Name',
-    },
-    {
-      value: 'Price',
-      label: 'Price',
-    },
-    {
-      value: 'Rating',
-      label: 'Rating',
-    },
-  ];
 
   const handleClickOnPriceRange = (e: React.MouseEvent) => {
     if (
@@ -69,16 +41,16 @@ export const SidebarDrawer = ({
       e.target.name === 'button'
     ) {
       const [lowRange, highRange] = (e.target.id as string).split('-');
-      setRange({ low: +lowRange, high: +highRange });
+      setFilter({ ...filter, range: { low: +lowRange, high: +highRange } });
     }
   };
 
-  const handleChangeOnLow = (value: number) => {
-    setRange({ ...range, low: +value });
-  };
-
-  const handleChangeOnHigh = (value: string) => {
-    setRange({ ...range, high: +value });
+  const handleChangeOnLowHigh = (value: number, type: string) => {
+    if (type === 'low')
+      setFilter({ ...filter, range: { ...filter.range, low: +value } });
+    else {
+      setFilter({ ...filter, range: { ...filter.range, high: +value } });
+    }
   };
 
   const handleClickOnFilterInput = (e: React.MouseEvent) => {
@@ -89,17 +61,22 @@ export const SidebarDrawer = ({
     if ('value' in event.target && 'checked' in event.target) {
       const selected = event.target.value as string;
       if (event.target.checked) {
-        const categoryArray = new Set([...categories, selected]);
-        setCategories([...categoryArray]);
+        const categoryArray = new Set([...filter.categories, selected]);
+        setFilter({ ...filter, categories: [...categoryArray] });
       } else {
-        const index = categories.findIndex(
+        const index = filter.categories.findIndex(
           (category: string) => category === selected
         );
-        categories.slice(index, 1);
-        setCategories([...categories]);
+        filter.categories.slice(index, 1);
+        setFilter({ ...filter, categories: [...filter.categories] });
       }
     }
   };
+
+  const handleSearchInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setFilter({ ...filter, search: event.target.value });
+  };
+
   return (
     <Drawer
       sx={{
@@ -129,11 +106,15 @@ export const SidebarDrawer = ({
       </Stack>
       <Divider />
       <Stack padding={'20px'} spacing={3}>
-        <TextField label="Search By Name" size="small" />
+        <TextField
+          label="Search By Name"
+          size="small"
+          onChange={handleSearchInput}
+        />
         <TextField select label="Sort By" defaultValue={'None'} size="small">
-          {sortByOptions.map((option: Option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
+          {sortByOptions.map((option: string) => (
+            <MenuItem key={option} value={option}>
+              {option}
             </MenuItem>
           ))}
         </TextField>
@@ -153,106 +134,8 @@ export const SidebarDrawer = ({
         </TextField>
 
         <Typography variant="h6">Filter Options:</Typography>
+
         <Stack padding={'10px 0 0 20px'} gap={3}>
-          <Typography variant="body1">Select Filter Range: </Typography>
-          <Grid
-            container
-            columnGap={6}
-            rowGap={2}
-            justifyContent={'center'}
-            onClick={handleClickOnPriceRange}
-          >
-            <Button
-              sx={{
-                backgroundColor: 'rgba(0, 106, 255, 0.6)',
-                padding: '5px',
-                borderRadius: '4px',
-                color: 'black',
-              }}
-              id="0-25"
-              name="button"
-              disabled={range.low === 0 && range.high === 25 ? true : false}
-            >
-              0 - 25$
-            </Button>
-
-            <Button
-              sx={{
-                backgroundColor: 'rgba(0, 106, 255, 0.6)',
-                padding: '5px',
-                borderRadius: '4px',
-                color: 'black',
-              }}
-              name="button"
-              id="25-50"
-              disabled={range.low === 25 && range.high === 50 ? true : false}
-            >
-              25 - 50$
-            </Button>
-
-            <Button
-              sx={{
-                backgroundColor: 'rgba(0, 106, 255, 0.6)',
-                padding: '5px',
-                borderRadius: '4px',
-                color: 'black',
-              }}
-              name="button"
-              id="50-75"
-              disabled={range.low === 50 && range.high === 75 ? true : false}
-            >
-              50 - 75$
-            </Button>
-
-            <Button
-              sx={{
-                backgroundColor: 'rgba(0, 106, 255, 0.6)',
-                padding: '5px',
-                borderRadius: '4px',
-                color: 'black',
-              }}
-              name="button"
-              id="75-100"
-              disabled={range.low === 75 && range.high === 100 ? true : false}
-            >
-              75-100$
-            </Button>
-            <Stack
-              direction={'row'}
-              spacing={6}
-              onClick={handleClickOnFilterInput}
-            >
-              <TextField
-                id="input"
-                type="number"
-                variant="outlined"
-                label="Min"
-                size="small"
-                sx={{ width: '70px' }}
-                onChange={(event) => handleChangeOnLow(+event.target.value)}
-              />
-              <TextField
-                id="input"
-                type="number"
-                variant="outlined"
-                label="Max"
-                size="small"
-                sx={{ width: '70px' }}
-                onChange={(event) => handleChangeOnHigh(event.target.value)}
-              />
-            </Stack>
-          </Grid>
-          <Slider
-            aria-label="Temperature"
-            defaultValue={0}
-            valueLabelDisplay="auto"
-            shiftStep={5}
-            step={5}
-            marks
-            min={range.low}
-            max={range.high}
-            disabled={range.low === 0 && range.high === 100}
-          />
           <Stack>
             <Typography variant="body1">Categories: </Typography>
             <FormGroup
@@ -281,6 +164,127 @@ export const SidebarDrawer = ({
               />
             </FormGroup>
           </Stack>
+          <Typography variant="body1">Select Filter Range: </Typography>
+          <Grid
+            container
+            columnGap={6}
+            rowGap={2}
+            justifyContent={'center'}
+            onClick={handleClickOnPriceRange}
+          >
+            <Button
+              sx={{
+                backgroundColor: 'rgba(0, 106, 255, 0.6)',
+                padding: '5px',
+                borderRadius: '4px',
+                color: 'black',
+              }}
+              id="0-25"
+              name="button"
+              disabled={
+                filter.range.low === 0 && filter.range.high === 25
+                  ? true
+                  : false
+              }
+            >
+              0 - 25$
+            </Button>
+
+            <Button
+              sx={{
+                backgroundColor: 'rgba(0, 106, 255, 0.6)',
+                padding: '5px',
+                borderRadius: '4px',
+                color: 'black',
+              }}
+              name="button"
+              id="25-50"
+              disabled={
+                filter.range.low === 25 && filter.range.high === 50
+                  ? true
+                  : false
+              }
+            >
+              25 - 50$
+            </Button>
+
+            <Button
+              sx={{
+                backgroundColor: 'rgba(0, 106, 255, 0.6)',
+                padding: '5px',
+                borderRadius: '4px',
+                color: 'black',
+              }}
+              name="button"
+              id="50-75"
+              disabled={
+                filter.range.low === 50 && filter.range.high === 75
+                  ? true
+                  : false
+              }
+            >
+              50 - 75$
+            </Button>
+
+            <Button
+              sx={{
+                backgroundColor: 'rgba(0, 106, 255, 0.6)',
+                padding: '5px',
+                borderRadius: '4px',
+                color: 'black',
+              }}
+              name="button"
+              id="75-100"
+              disabled={
+                filter.range.low === 75 && filter.range.high === 100
+                  ? true
+                  : false
+              }
+            >
+              75-100$
+            </Button>
+            <Stack
+              direction={'row'}
+              spacing={6}
+              onClick={handleClickOnFilterInput}
+            >
+              <TextField
+                id="input"
+                type="number"
+                variant="outlined"
+                label="Min"
+                size="small"
+                sx={{ width: '70px' }}
+                onChange={(event) =>
+                  handleChangeOnLowHigh(+event.target.value, 'low')
+                }
+              />
+              <TextField
+                id="input"
+                type="number"
+                variant="outlined"
+                label="Max"
+                size="small"
+                sx={{ width: '70px' }}
+                onChange={(event) =>
+                  handleChangeOnLowHigh(+event.target.value, 'high')
+                }
+              />
+            </Stack>
+          </Grid>
+          {filter.range.low < filter.range.high && (
+            <Slider
+              aria-label="Temperature"
+              defaultValue={0}
+              valueLabelDisplay="auto"
+              shiftStep={5}
+              step={5}
+              marks
+              min={filter.range.low}
+              max={filter.range.high}
+              disabled={filter.range.low === 0 && filter.range.high === 100}
+            />
+          )}
         </Stack>
       </Stack>
     </Drawer>

@@ -45,10 +45,23 @@ const rangeInitialValue = {
   high: 100,
 };
 
+export type FilterType = {
+  search: string;
+  range: RangeType;
+  categories: Array<string>;
+  sortBy: string;
+  sortOrder: string;
+};
+
 const ViewAllProducts = () => {
   const [products, setProducts] = useState<Array<Product>>([]);
-  const [range, setRange] = useState<RangeType>(rangeInitialValue);
-  const [categories, setCategories] = useState<Array<string>>([]);
+  const [filter, setFilter] = useState<FilterType>({
+    search: '',
+    range: rangeInitialValue,
+    categories: [],
+    sortBy: '',
+    sortOrder: 'LowToHigh',
+  });
   const [showShare, setShowShare] = useState(false);
   const [saveClipboard, setSaveClipboard] = useState(false);
   const [productIdSelected, setProductIdSelected] = useState(0);
@@ -93,15 +106,22 @@ const ViewAllProducts = () => {
     getProducts();
   }, []);
 
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('search', filter.search);
+    url.searchParams.set(
+      'range',
+      JSON.stringify([filter.range.low, filter.range.high])
+    );
+    url.searchParams.set('category', JSON.stringify(filter.categories));
+    url.searchParams.set('sortBy', filter.sortBy);
+    url.searchParams.set('sortOrder', filter.sortOrder);
+  }, [filter]);
+
   return (
     <>
       <Navbar />
-      <SidebarDrawer
-        range={range}
-        setRange={setRange}
-        categories={categories}
-        setCategories={setCategories}
-      />
+      <SidebarDrawer filter={filter} setFilter={setFilter} />
       <Stack
         display={'flex'}
         flexDirection={'row'}
