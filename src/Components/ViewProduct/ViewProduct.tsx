@@ -121,7 +121,7 @@ export const ViewProduct = () => {
             <Rating
               name="read-only"
               value={productData?.rating ?? 0}
-              precision={0.5}
+              precision={0.1}
               readOnly
             />
 

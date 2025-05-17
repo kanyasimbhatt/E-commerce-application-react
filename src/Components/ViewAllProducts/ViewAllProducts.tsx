@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -11,6 +11,8 @@ import Navbar from '../Navbar/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { SidebarProvider } from './SidebarProvider';
 import { SidebarDrawer } from './SidebarDrawer';
+import useAddParameter from '../hooks/useAddParameter';
+import { useForm } from 'react-hook-form';
 
 export type Product = {
   id: number;
@@ -32,6 +34,57 @@ type InputObject = {
   products: Array<Product>;
 };
 
+export type FilterType = {
+  search: string;
+  range: RangeType;
+  categories: Array<string>;
+  sortBy: string;
+  sortOrder: string;
+  rating: number
+};
+
+
+const filterInitalValue = {
+  search: '',
+  range: {
+    low: 0,
+    high: 150,
+  },
+  categories: [],
+  sortBy: '',
+  sortOrder: 'LowToHigh',
+  rating: 0
+}
+
+const filterValueFromUrl = () => {
+  let filterValue: FilterType = { ...filterInitalValue };
+  let url = new URL(window.location.href);
+  for (let [key, value] of url.searchParams.entries()) {
+    switch (key) {
+      case "search":
+        filterValue.search = JSON.parse(value);
+        break;
+      case "range":
+        filterValue.range = JSON.parse(value);
+        break;
+      case "categories":
+        filterValue.categories = JSON.parse(value); 
+        break;
+      case "sortBy":
+        filterValue.sortBy = JSON.parse(value);
+        break;
+      case "sortOrder":
+        filterValue.sortOrder = JSON.parse(value);
+        break;
+      case "rating":
+        filterValue.rating = JSON.parse(value);
+        break;
+    }
+  }
+
+  return filterValue;
+}
+
 export const ViewAllProductsWrapper = () => {
   return (
     <SidebarProvider>
@@ -40,36 +93,22 @@ export const ViewAllProductsWrapper = () => {
   );
 };
 
-const rangeInitialValue = {
-  low: 0,
-  high: 100,
-};
-
-export type FilterType = {
-  search: string;
-  range: RangeType;
-  categories: Array<string>;
-  sortBy: string;
-  sortOrder: string;
-};
-
 const ViewAllProducts = () => {
   const [products, setProducts] = useState<Array<Product>>([]);
-  const [filter, setFilter] = useState<FilterType>({
-    search: '',
-    range: rangeInitialValue,
-    categories: [],
-    sortBy: '',
-    sortOrder: 'LowToHigh',
+  const { register, watch, setValue } = useForm<FilterType>({
+    defaultValues: filterValueFromUrl()
   });
+  let filter = watch();
+  const render = useRef<number>(0);
   const [showShare, setShowShare] = useState(false);
   const [saveClipboard, setSaveClipboard] = useState(false);
   const [productIdSelected, setProductIdSelected] = useState(0);
+  const [url] = useAddParameter<FilterType>(window.location.href, filter);
   const navigate = useNavigate();
   const matches1060 = useMediaQuery('(max-width:1060px)');
   const matches880 = useMediaQuery('(max-width:880px)');
 
-  async function getProducts() {
+  const getProducts = useCallback(async ()=>{
     try {
       const response = await fetch('https://dummyjson.com/products');
       if (!response.ok) {
@@ -80,7 +119,8 @@ const ViewAllProducts = () => {
     } catch (err) {
       console.log(err);
     }
-  }
+  }, [])
+  
 
   const handleClickOnProduct = (productId: string) =>
     navigate(`/product/${productId}`);
@@ -102,26 +142,70 @@ const ViewAllProducts = () => {
     setTimeout(() => setSaveClipboard((save) => !save), 3000);
   };
 
+  const handleSortAscending = (products: Product[]) => {
+    if (filter.sortBy === 'price' || filter.sortBy === 'rating')
+      return products.sort((a: Product, b: Product) => (a[filter.sortBy as keyof Product] as number) - (b[filter.sortBy as keyof Product] as number));
+
+    return products.sort((a: Product, b: Product) => (a['title'] as string).localeCompare(b['title'] as string))
+  }
+
+  const handleSortDescending = (products: Product[]) => {
+    if (filter.sortBy === 'price' || filter.sortBy === 'rating')
+      return products.sort((a: Product, b: Product) => (b[filter.sortBy as keyof Product] as number) - (a[filter.sortBy as keyof Product] as number));
+
+    return products.sort((a: Product, b: Product) => (b['title'] as string).localeCompare(a['title'] as string))
+
+  }
+
+  const getFilteredProducts = () => {
+    let filteredProducts = products;
+
+    filteredProducts = products.filter((product: Product) => {
+      const searchedTitle = filter.search
+        ? product.title.toLowerCase().includes(filter.search)
+        : true;
+
+      const filterByCategory = filter.categories.length !== 0
+        ? filter.categories.includes(product.category)
+        : true;
+      const conditionForPrice = filter.range.low <= filter.range.high && filter.range.low !== 0 && filter.range.high !== 150;
+      const filterByPrice = conditionForPrice ? product.price >= filter.range.low && product.price <= filter.range.high : true;
+      const filterByRating = filter.rating ? +product.rating.toFixed(1) === filter.rating : true;
+      return (
+        searchedTitle && filterByCategory && filterByPrice && filterByRating
+      );
+    });
+
+    if (filter.sortBy === '') return filteredProducts;
+
+    if (filter.sortOrder === 'LowToHigh') {
+      filteredProducts = handleSortAscending(filteredProducts);
+    }
+    else {
+      filteredProducts = handleSortDescending(filteredProducts);
+    }
+
+    return filteredProducts;
+  }
+
   useEffect(() => {
     getProducts();
   }, []);
 
   useEffect(() => {
-    const url = new URL(window.location.href);
-    url.searchParams.set('search', filter.search);
-    url.searchParams.set(
-      'range',
-      JSON.stringify([filter.range.low, filter.range.high])
-    );
-    url.searchParams.set('category', JSON.stringify(filter.categories));
-    url.searchParams.set('sortBy', filter.sortBy);
-    url.searchParams.set('sortOrder', filter.sortOrder);
+    if (render.current > 4) {
+      window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+
+      return;
+    }
+    render.current += 1;
+
   }, [filter]);
 
   return (
     <>
       <Navbar />
-      <SidebarDrawer filter={filter} setFilter={setFilter} />
+      <SidebarDrawer register={register} filter={filter} setValue={setValue} />
       <Stack
         display={'flex'}
         flexDirection={'row'}
@@ -132,7 +216,7 @@ const ViewAllProducts = () => {
         marginTop={'100px'}
         marginBottom={'50px'}
       >
-        {products.map((product: Product) => (
+        {getFilteredProducts().map((product: Product) => (
           <Card
             sx={{ maxWidth: 300, boxShadow: '0 0 10px  #bfbfbf' }}
             key={product.id}
