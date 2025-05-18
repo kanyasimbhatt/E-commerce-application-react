@@ -1,0 +1,14 @@
+.light{
+    background-color: white;
+    color: black;
+}
+
+.dark{
+    background-color: black;
+    color: white;
+}
+
+.dark-cards{
+    background-color: rgb(120, 119, 119);
+    color: white;
+}

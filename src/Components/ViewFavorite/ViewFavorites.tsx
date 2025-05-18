@@ -4,12 +4,12 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, Stack } from '@mui/material';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import Navbar from '../Navbar/Navbar';
 import { useUsers } from '../Auth/userProvider';
 import { getData, setData } from '../../Store/Store';
 import type { User } from '../Types/UserType';
 import { useFavorite } from '../ViewProduct/FavoritesProvider';
 import type { Product } from '../ViewAllProducts/ViewAllProducts';
+import Layout from '../Layout/Layout';
 
 export default function ViewFavorites() {
   const { userId } = useUsers();
@@ -28,8 +28,8 @@ export default function ViewFavorites() {
     setFavorites([...userData.favorites]);
   };
   return (
-    <div>
-      <Navbar />
+    <Layout showHamburger = {true}>
+     
       <Stack
         spacing={3}
         display={'flex'}
@@ -38,7 +38,9 @@ export default function ViewFavorites() {
         marginTop={'100px'}
       >
         {favorites.length === 0 && (
+          <Stack height={'100vh'}>
           <Typography variant="h5">No Records Found</Typography>
+          </Stack>
         )}
         {favorites.map((favorite) => (
           <Card
@@ -98,6 +100,6 @@ export default function ViewFavorites() {
           </Card>
         ))}
       </Stack>
-    </div>
+    </Layout>
   );
 }

@@ -10,15 +10,17 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import type { Product } from '../ViewAllProducts/ViewAllProducts';
 import { Box } from '@mui/material';
-import Navbar from '../Navbar/Navbar';
 import { useFavorite } from './FavoritesProvider';
 import { useUsers } from '../Auth/userProvider';
 import { getData, setData } from '../../Store/Store';
 import type { User } from '../Types/UserType';
+import Layout from '../Layout/Layout';
+import { useVisualMode } from '../Navbar/VisualModeProvider';
 
 export const ViewProduct = () => {
   const { productId } = useParams();
   const { userId } = useUsers();
+  const {darkMode} = useVisualMode();
   const [productData, setProductData] = useState<Product>();
   const navigate = useNavigate();
   const [addFavorite, setAddFavorite] = useState(false);
@@ -62,17 +64,20 @@ export const ViewProduct = () => {
   }, []);
 
   return (
-    <>
-      <Navbar />
+    <Layout showHamburger = {false}>
+      
       <Box
         sx={{
           maxWidth: '100%',
-          minHeight: '90vh',
+          minHeight: '96.03vh',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           padding: 2,
+          
         }}
+      
+
       >
         <Card
           sx={{
@@ -151,6 +156,6 @@ export const ViewProduct = () => {
           </CardContent>
         </Card>
       </Box>
-    </>
+    </Layout>
   );
 };

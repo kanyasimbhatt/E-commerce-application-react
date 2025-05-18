@@ -7,7 +7,7 @@ import { type User } from '../Types/UserType';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Box, Button, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../Navbar/Navbar';
+import Layout from '../Layout/Layout';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -27,16 +27,17 @@ export default function Profile() {
     navigate('/');
   };
   return (
-    <div>
-      <Navbar />
+    <Layout showHamburger = {false}>
+     
       <Box
         sx={{
           maxWidth: '100%',
-          minHeight: '90vh',
+          minHeight: '96.03vh',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           padding: 2,
+          
         }}
       >
         <Card
@@ -113,6 +114,6 @@ export default function Profile() {
           </CardContent>
         </Card>
       </Box>
-    </div>
+    </Layout>
   );
 }

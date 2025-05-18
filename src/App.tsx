@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
-import { RouteProtection } from './Components/RouteProtection/RouteProtection';
+import { RouteProtectionWrapper } from './Components/RouteProtection/RouteProtection';
 import { ViewAllProductsWrapper } from './Components/ViewAllProducts/ViewAllProducts';
 import { Login } from './Components/Auth/Login/Login';
 import { SignUp } from './Components/Auth/SignUp/SignUp';
@@ -10,10 +10,10 @@ import Profile from './Components/Profile/Profile';
 
 function App() {
   return (
-    <>
+
       <Router>
         <Routes>
-          <Route path="/" element={<RouteProtection />}>
+          <Route path="/" element={<RouteProtectionWrapper />}>
             <Route path="/" element={<ViewAllProductsWrapper />}></Route>
             <Route path="/product/:productId" element={<ViewProduct />}></Route>
             <Route path="/favorites" element={<ViewFavorites />}></Route>
@@ -23,7 +23,7 @@ function App() {
           <Route path="/signup" element={<SignUp />}></Route>
         </Routes>
       </Router>
-    </>
+  
   );
 }
 

@@ -13,12 +13,17 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useNavigate } from 'react-router-dom';
 import { useSidebar } from '../ViewAllProducts/SidebarProvider';
+import { useVisualMode } from './VisualModeProvider';
 
-export default function Navbar() {
+type ChildrenType = {
+  showHamburger: boolean;
+}
+
+export default function Navbar({showHamburger} : ChildrenType) {
   const navigate = useNavigate();
   const { setOpen } = useSidebar();
+  const {darkMode, setDarkMode} = useVisualMode();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [lightMode, setLightMode] = React.useState(true);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -42,11 +47,15 @@ export default function Navbar() {
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+
+  const handleVisualModeChange = () => {
+    setDarkMode((dark) => !dark)
+  }
   return (
     <Box sx={{ flexGrow: 1, position: 'fixed', top: 0, width: '100%' }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
+          {showHamburger && <IconButton
             size="large"
             edge="start"
             color="inherit"
@@ -55,7 +64,7 @@ export default function Navbar() {
             sx={{ mr: 2 }}
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton>}
           <Typography
             variant="h6"
             component="div"
@@ -69,9 +78,9 @@ export default function Navbar() {
             <IconButton
               size="large"
               color="inherit"
-              onClick={() => setLightMode((light) => !light)}
+              onClick={handleVisualModeChange}
             >
-              {lightMode ? <LightModeIcon /> : <DarkModeIcon />}
+              {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
             </IconButton>
 
             <IconButton onClick={handleClickOnFavorites}>
