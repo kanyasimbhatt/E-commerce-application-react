@@ -18,11 +18,10 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { useSidebar } from './SidebarProvider';
 import type { FilterType } from './ViewAllProducts';
 
-
 type childrenType = {
   register: UseFormRegister<FilterType>;
   filter: FilterType;
-  setValue: UseFormSetValue<FilterType>
+  setValue: UseFormSetValue<FilterType>;
 };
 
 export const SidebarDrawer = ({ register, filter, setValue }: childrenType) => {
@@ -82,8 +81,12 @@ export const SidebarDrawer = ({ register, filter, setValue }: childrenType) => {
           size="small"
           {...register('search')}
         />
-        <TextField select label="Sort By" defaultValue={'none'} size="small" 
-        {...register('sortBy')}
+        <TextField
+          select
+          label="Sort By"
+          defaultValue={'none'}
+          size="small"
+          {...register('sortBy')}
         >
           {sortByOptions.map((option: string) => (
             <MenuItem key={option} value={option}>
@@ -112,9 +115,7 @@ export const SidebarDrawer = ({ register, filter, setValue }: childrenType) => {
         <Stack padding={'10px 0 0 20px'} gap={3}>
           <Stack>
             <Typography variant="body1">Categories: </Typography>
-            <FormGroup
-              sx={{ paddingLeft: '20px' }}
-            >
+            <FormGroup sx={{ paddingLeft: '20px' }}>
               <FormControlLabel
                 control={<Checkbox />}
                 value={'groceries'}
@@ -144,7 +145,7 @@ export const SidebarDrawer = ({ register, filter, setValue }: childrenType) => {
           <Typography variant="body1">Select Filter Range: </Typography>
           <Grid
             container
-            columnGap={6}
+            columnGap={7}
             rowGap={2}
             justifyContent={'center'}
             onClick={handleClickOnPriceRange}
@@ -158,11 +159,7 @@ export const SidebarDrawer = ({ register, filter, setValue }: childrenType) => {
               }}
               id="0-25"
               name="button"
-              disabled={
-                filter.range.low === 0 && filter.range.high === 25
-                  ? true
-                  : false
-              }
+              disabled={filter.range.low === 0 && filter.range.high === 25}
             >
               0 - 25$
             </Button>
@@ -176,11 +173,7 @@ export const SidebarDrawer = ({ register, filter, setValue }: childrenType) => {
               }}
               name="button"
               id="25-50"
-              disabled={
-                filter.range.low === 25 && filter.range.high === 50
-                  ? true
-                  : false
-              }
+              disabled={filter.range.low === 25 && filter.range.high === 50}
             >
               25 - 50$
             </Button>
@@ -194,11 +187,7 @@ export const SidebarDrawer = ({ register, filter, setValue }: childrenType) => {
               }}
               name="button"
               id="50-75"
-              disabled={
-                filter.range.low === 50 && filter.range.high === 75
-                  ? true
-                  : false
-              }
+              disabled={filter.range.low === 50 && filter.range.high === 75}
             >
               50 - 75$
             </Button>
@@ -212,11 +201,7 @@ export const SidebarDrawer = ({ register, filter, setValue }: childrenType) => {
               }}
               name="button"
               id="75-100"
-              disabled={
-                filter.range.low === 75 && filter.range.high === 100
-                  ? true
-                  : false
-              }
+              disabled={filter.range.low === 75 && filter.range.high === 100}
             >
               75-100$
             </Button>
@@ -229,14 +214,10 @@ export const SidebarDrawer = ({ register, filter, setValue }: childrenType) => {
                 color: 'black',
               }}
               name="button"
-              id="100-150"
-              disabled={
-                filter.range.low === 100 && filter.range.high === 150
-                  ? true
-                  : false
-              }
+              id="100-3000"
+              disabled={filter.range.low === 100 && filter.range.high === 3000}
             >
-              100-150$
+              &gt; 100
             </Button>
 
             <Button
@@ -247,19 +228,16 @@ export const SidebarDrawer = ({ register, filter, setValue }: childrenType) => {
                 color: 'black',
               }}
               name="button"
-              id="0-150"
+              id="0-3000"
               disabled={
-                filter.range.low === 0 && filter.range.high === 150
+                filter.range.low === 0 && filter.range.high === 3000
                   ? true
                   : false
               }
             >
               All
             </Button>
-            <Stack
-              direction={'row'}
-              spacing={6}
-            >
+            <Stack direction={'row'} spacing={6}>
               <TextField
                 id="input"
                 type="number"
@@ -281,7 +259,7 @@ export const SidebarDrawer = ({ register, filter, setValue }: childrenType) => {
             </Stack>
           </Grid>
           <Stack>
-            <Typography variant='body1'>Select Rating</Typography>   
+            <Typography variant="body1">Select Rating</Typography>
             <Slider
               aria-label="Temperature"
               defaultValue={0}
@@ -293,7 +271,7 @@ export const SidebarDrawer = ({ register, filter, setValue }: childrenType) => {
               min={0}
               max={5}
             />
-         </Stack>
+          </Stack>
         </Stack>
       </Stack>
     </Drawer>

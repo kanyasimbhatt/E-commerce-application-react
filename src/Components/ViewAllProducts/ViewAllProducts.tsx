@@ -1,18 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import CloseIcon from '@mui/icons-material/Close';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { Typography, Card, Button, Stack, IconButton } from '@mui/material';
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { lazy, Suspense } from 'react';
+import { Typography } from '@mui/material';
 import Navbar from '../Navbar/Navbar';
-import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import { SidebarProvider } from './SidebarProvider';
 import { SidebarDrawer } from './SidebarDrawer';
-import useAddParameter from '../hooks/useAddParameter';
-import { useForm } from 'react-hook-form';
 
 export type Product = {
   id: number;
@@ -30,7 +21,7 @@ export type RangeType = {
   high: number;
 };
 
-type InputObject = {
+export type InputObject = {
   products: Array<Product>;
 };
 
@@ -40,50 +31,49 @@ export type FilterType = {
   categories: Array<string>;
   sortBy: string;
   sortOrder: string;
-  rating: number
+  rating: number;
 };
-
 
 const filterInitalValue = {
   search: '',
   range: {
     low: 0,
-    high: 150,
+    high: 3000,
   },
   categories: [],
   sortBy: '',
   sortOrder: 'LowToHigh',
-  rating: 0
-}
+  rating: 0,
+};
 
 const filterValueFromUrl = () => {
-  let filterValue: FilterType = { ...filterInitalValue };
-  let url = new URL(window.location.href);
-  for (let [key, value] of url.searchParams.entries()) {
+  const filterValue: FilterType = { ...filterInitalValue };
+  const url = new URL(window.location.href);
+  for (const [key, value] of url.searchParams.entries()) {
     switch (key) {
-      case "search":
+      case 'search':
         filterValue.search = JSON.parse(value);
         break;
-      case "range":
+      case 'range':
         filterValue.range = JSON.parse(value);
         break;
-      case "categories":
-        filterValue.categories = JSON.parse(value); 
+      case 'categories':
+        filterValue.categories = JSON.parse(value);
         break;
-      case "sortBy":
+      case 'sortBy':
         filterValue.sortBy = JSON.parse(value);
         break;
-      case "sortOrder":
+      case 'sortOrder':
         filterValue.sortOrder = JSON.parse(value);
         break;
-      case "rating":
+      case 'rating':
         filterValue.rating = JSON.parse(value);
         break;
     }
   }
 
   return filterValue;
-}
+};
 
 export const ViewAllProductsWrapper = () => {
   return (
@@ -94,203 +84,24 @@ export const ViewAllProductsWrapper = () => {
 };
 
 const ViewAllProducts = () => {
-  const [products, setProducts] = useState<Array<Product>>([]);
   const { register, watch, setValue } = useForm<FilterType>({
-    defaultValues: filterValueFromUrl()
+    defaultValues: filterValueFromUrl(),
   });
-  let filter = watch();
-  const render = useRef<number>(0);
-  const [showShare, setShowShare] = useState(false);
-  const [saveClipboard, setSaveClipboard] = useState(false);
-  const [productIdSelected, setProductIdSelected] = useState(0);
-  const [url] = useAddParameter<FilterType>(window.location.href, filter);
-  const navigate = useNavigate();
-  const matches1060 = useMediaQuery('(max-width:1060px)');
-  const matches880 = useMediaQuery('(max-width:880px)');
+  const filter = watch();
 
-  const getProducts = useCallback(async ()=>{
-    try {
-      const response = await fetch('https://dummyjson.com/products');
-      if (!response.ok) {
-        throw new Error('error while fetching data');
-      }
-      const data: InputObject = await response.json();
-      setProducts(data.products);
-    } catch (err) {
-      console.log(err);
-    }
-  }, [])
-  
-
-  const handleClickOnProduct = (productId: string) =>
-    navigate(`/product/${productId}`);
-
-  const handleClickOnShare = (productId: number) => {
-    setProductIdSelected(productId);
-    setShowShare((share) => !share);
-  };
-
-  const handleClickOnClose = () => {
-    setShowShare((share) => !share);
-  };
-
-  const handleSaveToClipboard = async () => {
-    await window.navigator.clipboard.writeText(
-      `http://localhost:5175/product/${productIdSelected}`
-    );
-    setSaveClipboard((save) => !save);
-    setTimeout(() => setSaveClipboard((save) => !save), 3000);
-  };
-
-  const handleSortAscending = (products: Product[]) => {
-    if (filter.sortBy === 'price' || filter.sortBy === 'rating')
-      return products.sort((a: Product, b: Product) => (a[filter.sortBy as keyof Product] as number) - (b[filter.sortBy as keyof Product] as number));
-
-    return products.sort((a: Product, b: Product) => (a['title'] as string).localeCompare(b['title'] as string))
-  }
-
-  const handleSortDescending = (products: Product[]) => {
-    if (filter.sortBy === 'price' || filter.sortBy === 'rating')
-      return products.sort((a: Product, b: Product) => (b[filter.sortBy as keyof Product] as number) - (a[filter.sortBy as keyof Product] as number));
-
-    return products.sort((a: Product, b: Product) => (b['title'] as string).localeCompare(a['title'] as string))
-
-  }
-
-  const getFilteredProducts = () => {
-    let filteredProducts = products;
-
-    filteredProducts = products.filter((product: Product) => {
-      const searchedTitle = filter.search
-        ? product.title.toLowerCase().includes(filter.search)
-        : true;
-
-      const filterByCategory = filter.categories.length !== 0
-        ? filter.categories.includes(product.category)
-        : true;
-      const conditionForPrice = filter.range.low <= filter.range.high && filter.range.low !== 0 && filter.range.high !== 150;
-      const filterByPrice = conditionForPrice ? product.price >= filter.range.low && product.price <= filter.range.high : true;
-      const filterByRating = filter.rating ? +product.rating.toFixed(1) === filter.rating : true;
-      return (
-        searchedTitle && filterByCategory && filterByPrice && filterByRating
-      );
-    });
-
-    if (filter.sortBy === '') return filteredProducts;
-
-    if (filter.sortOrder === 'LowToHigh') {
-      filteredProducts = handleSortAscending(filteredProducts);
-    }
-    else {
-      filteredProducts = handleSortDescending(filteredProducts);
-    }
-
-    return filteredProducts;
-  }
-
-  useEffect(() => {
-    getProducts();
-  }, []);
-
-  useEffect(() => {
-    if (render.current > 4) {
-      window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-
-      return;
-    }
-    render.current += 1;
-
-  }, [filter]);
+  const ShowProducts = lazy(() => import('./ShowProducts/ShowProductsLogic'));
 
   return (
     <>
       <Navbar />
       <SidebarDrawer register={register} filter={filter} setValue={setValue} />
-      <Stack
-        display={'flex'}
-        flexDirection={'row'}
-        flexWrap={'wrap'}
-        flexGrow={1}
-        gap={'50px'}
-        justifyContent={'center'}
-        marginTop={'100px'}
-        marginBottom={'50px'}
-      >
-        {getFilteredProducts().map((product: Product) => (
-          <Card
-            sx={{ maxWidth: 300, boxShadow: '0 0 10px  #bfbfbf' }}
-            key={product.id}
-          >
-            <CardMedia
-              sx={{ height: 340 }}
-              image={product.images[0]}
-              title={product.title}
-            />
-            <CardContent sx={{ height: 160 }}>
-              <Typography gutterBottom variant="h5" component="div">
-                {product.title}
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {product.description}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button
-                size="small"
-                onClick={() => handleClickOnShare(product.id)}
-              >
-                Share
-              </Button>
-              <Button
-                size="small"
-                onClick={() => handleClickOnProduct(`${product.id}`)}
-              >
-                Learn More
-              </Button>
-            </CardActions>
-          </Card>
-        ))}
-      </Stack>
-
-      {showShare && (
-        <Stack
-          position={'fixed'}
-          width={'100%'}
-          height={'100vh'}
-          top={0}
-          paddingLeft={matches1060 ? (matches880 ? '0' : '30vw') : '35vw'}
-          paddingTop={matches880 ? '50%' : '20%'}
-          zIndex={3}
-          sx={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-        >
-          <Stack
-            borderRadius={'7px'}
-            gap={3}
-            height={'150px'}
-            width={matches880 ? '100%' : '400px'}
-            padding={matches880 ? '0' : '40px'}
-            sx={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
-          >
-            <IconButton
-              onClick={handleClickOnClose}
-              sx={{ display: 'flex', justifyContent: 'end', width: '40px' }}
-            >
-              <CloseIcon />
-            </IconButton>
-
-            <Typography variant="h6" gap={3} textAlign={'center'}>
-              Copy Link to Clipboard{' '}
-              <IconButton onClick={handleSaveToClipboard}>
-                {saveClipboard ? (
-                  <CheckCircleRoundedIcon color="success" />
-                ) : (
-                  <ContentCopyIcon />
-                )}
-              </IconButton>
-            </Typography>
-          </Stack>
-        </Stack>
-      )}
+      <Suspense fallback={<Loading />}>
+        <ShowProducts filter={filter} />
+      </Suspense>
     </>
   );
+};
+
+const Loading = () => {
+  return <Typography variant="h3">Loading...</Typography>;
 };
