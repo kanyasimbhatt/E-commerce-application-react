@@ -1,5 +1,10 @@
 export function getData(key: string) {
-  return JSON.parse(localStorage.getItem(key) as string);
+  try {
+    return JSON.parse(localStorage.getItem(key) as string);
+  } catch (err) {
+    console.log(err);
+    return localStorage.getItem(key);
+  }
 }
 
 export function setData<T>(key: string, userData: T) {

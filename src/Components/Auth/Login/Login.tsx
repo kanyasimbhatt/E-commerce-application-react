@@ -11,8 +11,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { type User } from '../../Types/UserType';
-import { getData, setData } from '../../Utils/Store';
+import { type User } from '../../../../Types/UserType';
+import { getData, setData } from '../../../../Utils/Store';
 import { useUsers } from '../userProvider';
 
 type UserFormField = {
@@ -56,24 +56,20 @@ export const Login = () => {
 
   const onSubmit: SubmitHandler<UserFormField> = (data) => {
     const users = getData('users-array') || [];
-    const userData = users.find((user: User) => user.email === data.email);
+    const userData = users.find(
+      (user: User) =>
+        user.email === data.email && user.password === data.password
+    );
     if (!userData) {
       setError('root', {
         type: 'authentication',
-        message: 'Email ID not found',
+        message: 'Invalid email or password',
       });
       return;
     }
-    if (userData.password === data.password) {
-      setUserId(userData.id);
-      setData<string>('user-id', userData.id);
-      navigate('/');
-    } else {
-      setError('root', {
-        type: 'authentication',
-        message: 'Enter the correct password',
-      });
-    }
+    setUserId(userData.id);
+    setData<string>('user-id', userData.id);
+    navigate('/');
   };
 
   return (
