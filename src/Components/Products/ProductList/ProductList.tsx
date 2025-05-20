@@ -7,7 +7,6 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { Typography, Card, Button, Stack, IconButton } from '@mui/material';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Navbar from '../../Navbar/Navbar';
 import { type Product, type InputObject } from '../../../../Types/ProductType';
 
 export default function ProductList() {
@@ -54,7 +53,6 @@ export default function ProductList() {
 
   return (
     <>
-      <Navbar />
       <Stack
         display={'flex'}
         flexDirection={'row'}

@@ -1,5 +1,6 @@
 import { Outlet, Navigate } from 'react-router-dom';
 import { UserProvider } from '../Auth/userProvider';
+import ApplicationLayout from '../Products/Layout/ApplicationLayout';
 
 type ChildrenType = {
   userId: string;
@@ -18,7 +19,9 @@ const RouteProtection = ({ userId }: ChildrenType) => {
   return (
     <>
       {userId ? (
-        <Outlet />
+        <ApplicationLayout>
+          <Outlet />
+        </ApplicationLayout>
       ) : (
         <Navigate to="/login" state={{ from: newLocation }} replace />
       )}
