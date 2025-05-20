@@ -1,40 +1,28 @@
-import { useEffect, useState } from "react";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import CloseIcon from "@mui/icons-material/Close";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { Typography, Card, Button, Stack, IconButton } from "@mui/material";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import Navbar from "../Navbar/Navbar";
+import { useEffect, useState } from 'react';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import CloseIcon from '@mui/icons-material/Close';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { Typography, Card, Button, Stack, IconButton } from '@mui/material';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Navbar from '../../Navbar/Navbar';
+import { type Product, type InputObject } from '../../../../Types/ProductType';
 
-type Product = {
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  price: number;
-  images: string[];
-};
-
-type InputObject = {
-  products: Array<Product>;
-};
-
-export default function ViewAllProducts() {
+export default function ProductList() {
   const [products, setProducts] = useState<Array<Product>>([]);
   const [showShare, setShowShare] = useState(false);
   const [saveClipboard, setSaveClipboard] = useState(false);
   const [productIdSelected, setProductIdSelected] = useState(0);
-  const matches1060 = useMediaQuery("(max-width:1060px)");
-  const matches880 = useMediaQuery("(max-width:880px)");
+  const matches1060 = useMediaQuery('(max-width:1060px)');
+  const matches880 = useMediaQuery('(max-width:880px)');
 
   async function getProducts() {
     try {
-      const response = await fetch("https://dummyjson.com/products");
+      const response = await fetch('https://dummyjson.com/products');
       if (!response.ok) {
-        throw new Error("error while fetching data");
+        throw new Error('error while fetching data');
       }
       const data: InputObject = await response.json();
       setProducts(data.products);
@@ -68,18 +56,18 @@ export default function ViewAllProducts() {
     <>
       <Navbar />
       <Stack
-        display={"flex"}
-        flexDirection={"row"}
-        flexWrap={"wrap"}
+        display={'flex'}
+        flexDirection={'row'}
+        flexWrap={'wrap'}
         flexGrow={1}
-        gap={"50px"}
-        justifyContent={"center"}
-        marginTop={"100px"}
-        marginBottom={"50px"}
+        gap={'50px'}
+        justifyContent={'center'}
+        marginTop={'100px'}
+        marginBottom={'50px'}
       >
         {products.map((product: Product) => (
           <Card
-            sx={{ maxWidth: 300, boxShadow: "0 0 10px  #bfbfbf" }}
+            sx={{ maxWidth: 300, boxShadow: '0 0 10px  #bfbfbf' }}
             key={product.id}
           >
             <CardMedia
@@ -91,7 +79,7 @@ export default function ViewAllProducts() {
               <Typography gutterBottom variant="h5" component="div">
                 {product.title}
               </Typography>
-              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {product.description}
               </Typography>
             </CardContent>
@@ -110,32 +98,32 @@ export default function ViewAllProducts() {
 
       {showShare && (
         <Stack
-          position={"fixed"}
-          width={"100%"}
-          height={"100vh"}
+          position={'fixed'}
+          width={'100%'}
+          height={'100vh'}
           top={0}
-          paddingLeft={matches1060 ? (matches880 ? "0" : "30vw") : "35vw"}
-          paddingTop={matches880 ? "50%" : "20%"}
+          paddingLeft={matches1060 ? (matches880 ? '0' : '30vw') : '35vw'}
+          paddingTop={matches880 ? '50%' : '20%'}
           zIndex={3}
-          sx={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          sx={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
         >
           <Stack
-            borderRadius={"7px"}
+            borderRadius={'7px'}
             gap={3}
-            height={"150px"}
-            width={matches880 ? "100%" : "400px"}
-            padding={matches880 ? "0" : "40px"}
-            sx={{ backgroundColor: "rgba(255, 255, 255, 0.9)" }}
+            height={'150px'}
+            width={matches880 ? '100%' : '400px'}
+            padding={matches880 ? '0' : '40px'}
+            sx={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
           >
             <IconButton
               onClick={handleClickOnClose}
-              sx={{ display: "flex", justifyContent: "end", width: "40px" }}
+              sx={{ display: 'flex', justifyContent: 'end', width: '40px' }}
             >
               <CloseIcon />
             </IconButton>
 
-            <Typography variant="h6" gap={3} textAlign={"center"}>
-              Copy Link to Clipboard{" "}
+            <Typography variant="h6" gap={3} textAlign={'center'}>
+              Copy Link to Clipboard{' '}
               <IconButton onClick={handleSaveToClipboard}>
                 {saveClipboard ? (
                   <CheckCircleRoundedIcon color="success" />

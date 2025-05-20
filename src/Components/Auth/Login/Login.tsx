@@ -5,32 +5,24 @@ import {
   InputAdornment,
   Stack,
   IconButton,
-} from "@mui/material";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { useState } from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useNavigate } from "react-router-dom";
+} from '@mui/material';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useState } from 'react';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { type User } from '../../../../Types/UserType';
+import { getData, setData } from '../../../../Utils/Store';
+import { useUsers } from '../userProvider';
 
-type User = {
-  id: string;
-  name: string;
+type UserFormField = {
   email: string;
-  phoneNumber: string;
   password: string;
 };
 
-const schema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
-
-type UserFormField = z.infer<typeof schema>;
-
-export default function SignUp() {
+export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { setUserId } = useUsers();
   const navigate = useNavigate();
 
   const handleClickOnShowPassword = () => {
@@ -42,9 +34,7 @@ export default function SignUp() {
     handleSubmit,
     setError,
     formState: { isSubmitting, errors },
-  } = useForm<UserFormField>({
-    resolver: zodResolver(schema),
-  });
+  } = useForm<UserFormField>();
 
   const slotPropsForPassword = {
     input: {
@@ -52,7 +42,7 @@ export default function SignUp() {
         <InputAdornment position="end">
           <IconButton
             aria-label={
-              showPassword ? "hide the password" : "display the password"
+              showPassword ? 'hide the password' : 'display the password'
             }
             onClick={handleClickOnShowPassword}
             edge="end"
@@ -65,45 +55,41 @@ export default function SignUp() {
   };
 
   const onSubmit: SubmitHandler<UserFormField> = (data) => {
-    const users = JSON.parse(localStorage.getItem("users-array") as string);
-    const index = users.findIndex((user: User) => user.email === data.email);
-    if (index === -1) {
-      setError("root", {
-        type: "authentication",
-        message: "Enter a correct email ID",
+    const users = getData('users-array') || [];
+    const userData = users.find(
+      (user: User) =>
+        user.email === data.email && user.password === data.password
+    );
+    if (!userData) {
+      setError('root', {
+        type: 'authentication',
+        message: 'Invalid email or password',
       });
       return;
     }
-
-    if (users[index].password === data.password) {
-      localStorage.setItem("user-id", users[index].id);
-      navigate("/");
-    } else {
-      setError("root", {
-        type: "authentication",
-        message: "Enter correct password",
-      });
-    }
+    setUserId(userData.id);
+    setData<string>('user-id', userData.id);
+    navigate('/');
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack
-        direction={"column"}
+        direction={'column'}
         spacing={3}
-        maxWidth={"600px"}
-        margin={"auto"}
-        marginTop={"80px"}
-        padding={"80px"}
-        boxShadow={"0px 0px 20px gray"}
-        borderRadius={"7px"}
+        maxWidth={'600px'}
+        margin={'auto'}
+        marginTop={'80px'}
+        padding={'80px'}
+        boxShadow={'0px 0px 20px gray'}
+        borderRadius={'7px'}
       >
-        <Typography variant="h4" textAlign={"center"}>
+        <Typography variant="h4" textAlign={'center'}>
           Login
         </Typography>
 
         <TextField
-          {...register("email")}
+          {...register('email')}
           type="email"
           label="Email"
           variant="outlined"
@@ -113,8 +99,8 @@ export default function SignUp() {
         ></TextField>
 
         <TextField
-          {...register("password")}
-          type={showPassword ? "text" : "password"}
+          {...register('password')}
+          type={showPassword ? 'text' : 'password'}
           label="Password"
           slotProps={slotPropsForPassword}
           variant="outlined"
@@ -131,7 +117,7 @@ export default function SignUp() {
             size="large"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Loading..." : "Login"}
+            {isSubmitting ? 'Loading...' : 'Login'}
           </Button>
           {errors.root && (
             <Typography color="red">{errors.root.message}</Typography>
@@ -143,4 +129,4 @@ export default function SignUp() {
       </Stack>
     </form>
   );
-}
+};

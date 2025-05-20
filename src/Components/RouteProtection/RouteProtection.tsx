@@ -1,6 +1,27 @@
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet, Navigate } from 'react-router-dom';
+import { UserProvider } from '../Auth/userProvider';
 
-export default function RouteProtection() {
-  const id = localStorage.getItem("user-id") || "";
-  return <>{id ? <Outlet /> : <Navigate to="/login" />}</>;
-}
+type ChildrenType = {
+  userId: string;
+};
+
+export const RouteProtectionWrapper = ({ userId }: ChildrenType) => {
+  return (
+    <UserProvider>
+      <RouteProtection userId={userId} />
+    </UserProvider>
+  );
+};
+
+const RouteProtection = ({ userId }: ChildrenType) => {
+  const newLocation = `${location}`;
+  return (
+    <>
+      {userId ? (
+        <Outlet />
+      ) : (
+        <Navigate to="/login" state={{ from: newLocation }} replace />
+      )}
+    </>
+  );
+};

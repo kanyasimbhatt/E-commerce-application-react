@@ -5,65 +5,72 @@ import {
   InputAdornment,
   Stack,
   IconButton,
-} from "@mui/material";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { useState } from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { red } from "@mui/material/colors";
-import { useNavigate } from "react-router-dom";
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  password: string;
-};
+} from '@mui/material';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useState } from 'react';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useNavigate } from 'react-router-dom';
+import { getData, setData } from '../../../../Utils/Store';
+import type { User } from '../../../../Types/UserType';
+import { useUsers } from '../userProvider';
 
 const schema = z.object({
+  id: z.string(),
   name: z
     .string()
     .refine(
-      (value) => /^[a-zA-Z]+\s+[a-zA-Z]+$/.test(value ?? ""),
-      "Please enter both firstname and lastname"
+      (value) => /^[a-zA-Z]+\s+[a-zA-Z]+$/.test(value ?? ''),
+      'Please enter both First Name and Last Name'
     ),
   email: z.string().email(),
   phoneNumber: z
     .string()
     .refine(
-      (value) => /^(\d{10})$/.test(value ?? ""),
-      "Please Enter a 10 digit number"
+      (value) => /^(\d{10})$/.test(value ?? ''),
+      'Please Enter a 10 digit number'
     ),
   password: z
     .string()
     .refine(
       (value) =>
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(
-          value ?? ""
+          value ?? ''
         ),
-      `Enter Proper password having minimum 8 length, atleast 1 uppercase, 1 lowercase, 1 special character`
+      `Enter Proper password having minimum 8 length, at least 1 uppercase, 1 lowercase, 1 special character`
     ),
 });
 
 type UserFormField = z.infer<typeof schema>;
 
-export default function SignUp() {
+export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { setUserId } = useUsers();
 
   const handleClickOnShowPassword = () => {
     setShowPassword((show) => !show);
   };
 
+  const defaultValue = {
+    id: '',
+    name: '',
+    email: '',
+    phoneNumber: '',
+    password: '',
+  };
+
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<UserFormField>({
     resolver: zodResolver(schema),
+    mode: 'onChange',
+    defaultValues: defaultValue,
   });
 
   const slotPropsForPassword = {
@@ -72,7 +79,7 @@ export default function SignUp() {
         <InputAdornment position="end">
           <IconButton
             aria-label={
-              showPassword ? "hide the password" : "display the password"
+              showPassword ? 'hide the password' : 'display the password'
             }
             onClick={handleClickOnShowPassword}
             edge="end"
@@ -91,33 +98,40 @@ export default function SignUp() {
   };
 
   const onSubmit: SubmitHandler<UserFormField> = (data) => {
-    const users: Array<User> =
-      JSON.parse(localStorage.getItem("users-array") as string) || [];
+    const userArray = getData('users-array') || [];
+    const present = userArray.some((user: User) => user.email === data.email);
+    if (present) {
+      setError('root', {
+        type: 'authentication',
+        message: 'Email Id Already Exists',
+      });
+      return;
+    }
     const id = crypto.randomUUID();
-    users.push({ ...data, id: id });
-    localStorage.setItem("users-array", JSON.stringify(users));
-    localStorage.setItem("user-id", id);
-    navigate("/");
+    setData<User>('users-array', { ...data, id, favorites: [] });
+    setUserId(id);
+    setData<string>('user-id', id);
+    navigate('/');
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack
-        direction={"column"}
+        direction={'column'}
         spacing={3}
-        maxWidth={"600px"}
-        margin={"auto"}
-        marginTop={"80px"}
-        padding={"80px"}
-        boxShadow={"0px 0px 20px gray"}
-        borderRadius={"7px"}
+        maxWidth={'600px'}
+        margin={'auto'}
+        marginTop={'80px'}
+        padding={'80px'}
+        boxShadow={'0px 0px 20px gray'}
+        borderRadius={'7px'}
       >
-        <Typography variant="h4" textAlign={"center"}>
+        <Typography variant="h4" textAlign={'center'}>
           Sign Up
         </Typography>
         <Stack>
           <TextField
-            {...register("name")}
+            {...register('name')}
             type="text"
             label="Full Name"
             variant="outlined"
@@ -126,13 +140,13 @@ export default function SignUp() {
             required
           ></TextField>
           {errors.name && (
-            <Typography color={red[500]}>{errors.name.message}</Typography>
+            <Typography color="error">{errors.name.message}</Typography>
           )}
         </Stack>
 
         <Stack>
           <TextField
-            {...register("email")}
+            {...register('email')}
             type="email"
             label="Email"
             variant="outlined"
@@ -141,12 +155,12 @@ export default function SignUp() {
             required
           ></TextField>
           {errors.email && (
-            <Typography color={red[500]}>{errors.email.message}</Typography>
+            <Typography color="error">{errors.email.message}</Typography>
           )}
         </Stack>
         <Stack>
           <TextField
-            {...register("phoneNumber")}
+            {...register('phoneNumber')}
             type="text"
             label="Phone Number"
             variant="outlined"
@@ -156,15 +170,13 @@ export default function SignUp() {
             required
           ></TextField>
           {errors.phoneNumber && (
-            <Typography color={red[500]}>
-              {errors.phoneNumber.message}
-            </Typography>
+            <Typography color="error">{errors.phoneNumber.message}</Typography>
           )}
         </Stack>
         <Stack>
           <TextField
-            {...register("password")}
-            type={showPassword ? "text" : "password"}
+            {...register('password')}
+            type={showPassword ? 'text' : 'password'}
             label="Password"
             slotProps={slotPropsForPassword}
             variant="outlined"
@@ -174,9 +186,10 @@ export default function SignUp() {
             required
           ></TextField>
           {errors.password && (
-            <Typography color={red[500]}>{errors.password.message}</Typography>
+            <Typography color="error">{errors.password.message}</Typography>
           )}
         </Stack>
+
         <Stack>
           <Button
             type="submit"
@@ -185,8 +198,11 @@ export default function SignUp() {
             size="large"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Loading..." : "Sign Up"}
+            {isSubmitting ? 'Loading...' : 'Sign Up'}
           </Button>
+          {errors.root && (
+            <Typography color="error">{errors.root.message}</Typography>
+          )}
           <Typography variant="subtitle2" color="gray">
             Already a user: <a href="/login">Login</a>
           </Typography>
@@ -194,4 +210,4 @@ export default function SignUp() {
       </Stack>
     </form>
   );
-}
+};
