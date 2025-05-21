@@ -1,6 +1,6 @@
 import { Outlet, Navigate } from 'react-router-dom';
 import { UserProvider } from '../Auth/userProvider';
-import ApplicationLayout from '../Products/Layout/ApplicationLayout';
+import ApplicationLayout from '../../../Layout/ApplicationLayout';
 
 type ChildrenType = {
   userId: string;

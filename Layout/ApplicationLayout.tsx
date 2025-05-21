@@ -1,4 +1,4 @@
-import Navbar from '../../Navbar/Navbar';
+import Navbar from '../src/Components/Navbar/Navbar';
 
 type ChildrenType = {
   children: React.ReactNode;
