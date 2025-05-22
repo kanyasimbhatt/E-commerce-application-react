@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://dummyjson.com/',
+  baseURL: 'https://dummyjson.com',
   timeout: 1000,
   headers: { 'Content-Type': 'application/json' },
 });
@@ -11,7 +11,7 @@ axios.interceptors.request.use(
     return config;
   },
   function (error) {
-    return Promise.reject(error);
+    throw new Error(error);
   }
 );
 
@@ -24,6 +24,6 @@ axios.interceptors.response.use(
       alert(error.response.message);
     }
 
-    return Promise.reject(error);
+    throw new Error(error);
   }
 );

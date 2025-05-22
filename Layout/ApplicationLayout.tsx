@@ -1,4 +1,6 @@
+import { ErrorBoundary } from 'react-error-boundary';
 import Navbar from '../src/Components/Navbar/Navbar';
+import { Stack } from '@mui/material';
 
 type ChildrenType = {
   children: React.ReactNode;
@@ -8,8 +10,38 @@ const ApplicationLayout = ({ children }: ChildrenType) => {
   return (
     <>
       <Navbar />
-      {children}
+      <ErrorBoundary FallbackComponent={FallbackComponent}>
+        {children}
+      </ErrorBoundary>
     </>
+  );
+};
+
+const FallbackComponent = () => {
+  return (
+    <Stack
+      height={'100vh'}
+      display={'flex'}
+      justifyContent={'center'}
+      alignItems={'center'}
+    >
+      <Stack
+        sx={{
+          backgroundColor: 'beige',
+          padding: '20px 40px 20px 40px',
+          borderRadius: '10px',
+        }}
+      >
+        <h1>Something Went Wrong</h1>
+        <h2>Troubleshoot: </h2>
+        <ul>
+          <li>Try Reloading!</li>
+          <li>Try Logging in again!</li>
+          <li>Visit again after some time!</li>
+        </ul>
+        <h3>Thank you for your patience!</h3>
+      </Stack>
+    </Stack>
   );
 };
 
