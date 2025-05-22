@@ -5,6 +5,7 @@ import ProductList from './Components/Products/ProductList/ProductList';
 import { Login } from './Components/Auth/Login/Login';
 import { SignUp } from './Components/Auth/SignUp/SignUp';
 import { getData } from '../Utils/Store';
+import NotFound from './Components/NotFound/NotFound';
 
 function App() {
   const userId = getData('user-id');
@@ -14,16 +15,17 @@ function App() {
   return (
     <Routes>
       <Route element={<RouteProtectionWrapper userId={userId} />}>
-        <Route path="/" element={<ProductList />}></Route>
+        <Route path="/" element={<ProductList />} />
       </Route>
       <Route
         path="/login"
         element={userId ? <Navigate to={from} /> : <Login />}
-      ></Route>
+      />
       <Route
         path="/signup"
         element={userId ? <Navigate to={from} /> : <SignUp />}
-      ></Route>
+      />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
