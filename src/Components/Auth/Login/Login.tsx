@@ -11,8 +11,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { type User } from '../../../../Types/UserType';
-import { getData, setData } from '../../../../Utils/Store';
+import { type User } from '../../../Types/UserType';
+import { getData, setData } from '../../../Utils/Store';
 import { useUsers } from '../userProvider';
 
 type UserFormField = {

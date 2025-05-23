@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
-import { type Product } from '../../../../Types/ProductType';
-import { axiosInstance } from '../Services/axiosInterceptor';
-import RenderProducts from './RenderProducts';
+import { type Product } from '../../../Types/ProductType';
+import { axiosInstance } from '../../../Services/axiosInterceptor';
+import ProductListUI from './ProductListUI';
 
 export default function ProductList() {
   const [products, setProducts] = useState<Array<Product>>([]);
@@ -24,7 +24,7 @@ export default function ProductList() {
 
   return (
     <>
-      <RenderProducts products={products} />
+      <ProductListUI products={products} />
     </>
   );
 }

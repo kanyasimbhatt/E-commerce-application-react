@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import type { Product } from '../../../../../Types/ProductType';
-import ProductCard from './ProductCard';
+import { type Product } from '../../../Types/ProductType';
+import ProductCardUI from './ProductCardUI';
 
 type ChildrenType = {
   product: Product;
@@ -16,7 +16,7 @@ const ProductCardLogic = ({ product }: ChildrenType) => {
   };
 
   return (
-    <ProductCard
+    <ProductCardUI
       product={product}
       share={share}
       setShowShare={setShowShare}

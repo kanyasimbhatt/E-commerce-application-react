@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react';
-import DialogButton from './DialogButton';
+import DialogButtonUI from './DialogButtonUI';
 
 type ChildrenType = {
   share: boolean;
-  productIdSelected: number;
   setShowShare: React.Dispatch<React.SetStateAction<boolean>>;
+  productIdSelected: number;
 };
 
 const DialogButtonLogic = ({
@@ -26,7 +26,7 @@ const DialogButtonLogic = ({
   }, [productIdSelected]);
 
   return (
-    <DialogButton
+    <DialogButtonUI
       share={share}
       saveClipboard={saveClipboard}
       handleSaveToClipboard={handleSaveToClipboard}

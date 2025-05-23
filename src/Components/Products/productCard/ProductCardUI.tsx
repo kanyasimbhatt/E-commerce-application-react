@@ -10,8 +10,8 @@ import {
   DialogContent,
   Dialog,
 } from '@mui/material';
-import type { Product } from '../../../../../Types/ProductType';
-import DialogButtonLogic from '../DialogButton/DialogButtonLogic';
+import { type Product } from '../../../Types/ProductType';
+import DialogButton from '../DialogButton/DialogButton';
 
 type ChildrenType = {
   product: Product;
@@ -71,7 +71,7 @@ const ProductCard = ({
           <DialogContent dividers>
             <Typography variant="h6" gap={3} textAlign={'center'}>
               Copy Link to Clipboard
-              <DialogButtonLogic
+              <DialogButton
                 share={share}
                 setShowShare={setShowShare}
                 productIdSelected={productIdSelected}

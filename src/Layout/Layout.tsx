@@ -1,5 +1,5 @@
 import { ErrorBoundary } from 'react-error-boundary';
-import Navbar from '../src/Components/Navbar/Navbar';
+import Navbar from '../Components/Navbar/Navbar';
 import { Stack } from '@mui/material';
 
 type ChildrenType = {

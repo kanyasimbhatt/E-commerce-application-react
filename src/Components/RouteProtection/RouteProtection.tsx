@@ -1,17 +1,8 @@
 import { Outlet, Navigate } from 'react-router-dom';
-import { UserProvider } from '../Auth/userProvider';
-import ApplicationLayout from '../../../Layout/ApplicationLayout';
+import ApplicationLayout from '../../Layout/Layout';
 
 type ChildrenType = {
   userId: string;
-};
-
-export const RouteProtectionWrapper = ({ userId }: ChildrenType) => {
-  return (
-    <UserProvider>
-      <RouteProtection userId={userId} />
-    </UserProvider>
-  );
 };
 
 const RouteProtection = ({ userId }: ChildrenType) => {
@@ -28,3 +19,5 @@ const RouteProtection = ({ userId }: ChildrenType) => {
     </>
   );
 };
+
+export default RouteProtection;
