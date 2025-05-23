@@ -23,7 +23,7 @@ type UserFormField = {
 };
 
 export const Login = () => {
-  const isLoading = useCheckAuth();
+  const { isLoading } = useCheckAuth();
   const [showPassword, setShowPassword] = useState(false);
   const { setUserId } = useUsers();
   const navigate = useNavigate();

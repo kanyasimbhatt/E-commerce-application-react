@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const useCheckAuth = () => {
   const [isLoading, setIsLoading] = useState(true);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -12,13 +13,14 @@ const useCheckAuth = () => {
     const userArray = JSON.parse(localStorage.getItem('users-array') as string);
 
     const userData = userArray.find((user: User) => user.id === userId);
-    setIsLoading(false);
     if (userData) {
       navigate('/');
+    } else {
+      setIsLoading(false);
     }
   }, []);
 
-  return [isLoading];
+  return { isLoading };
 };
 
 export default useCheckAuth;
