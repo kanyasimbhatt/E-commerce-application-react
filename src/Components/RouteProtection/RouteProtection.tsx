@@ -1,18 +1,16 @@
 import { Outlet, Navigate } from 'react-router-dom';
-import ApplicationLayout from '../../Layout/Layout';
+import Layout from '../../Layout/Layout';
+import { useUsers } from '../Auth/userProvider';
 
-type ChildrenType = {
-  userId: string;
-};
-
-const RouteProtection = ({ userId }: ChildrenType) => {
+const RouteProtection = () => {
   const newLocation = `${location}`;
+  const { userId } = useUsers();
   return (
     <>
       {userId ? (
-        <ApplicationLayout>
+        <Layout>
           <Outlet />
-        </ApplicationLayout>
+        </Layout>
       ) : (
         <Navigate to="/login" state={{ from: newLocation }} replace />
       )}

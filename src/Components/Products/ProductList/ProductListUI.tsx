@@ -30,7 +30,7 @@ const RenderProducts = ({ products }: ChildrenType) => {
   );
 };
 
-const Loading = () => {
+export const Loading = () => {
   return <LinearProgress />;
 };
 
