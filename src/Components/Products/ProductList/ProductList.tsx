@@ -9,8 +9,8 @@ export default function ProductList() {
   const { showBoundary } = useErrorBoundary();
   async function setProductsInState() {
     try {
-      const data: Product[] = (await axiosInstance.get('/products')).data
-        .products;
+      const response = await axiosInstance.get('/products');
+      const data = response.data.products;
       setProducts(data);
     } catch (error) {
       console.log(error);
