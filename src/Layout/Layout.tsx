@@ -27,7 +27,7 @@ const FallbackComponent = () => {
     >
       <Stack
         sx={{
-          backgroundColor: 'beige',
+          backgroundColor: 'rgb(0, 0, 0, 0.2)',
           padding: '20px 40px 20px 40px',
           borderRadius: '10px',
         }}

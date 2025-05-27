@@ -21,7 +21,7 @@ axiosInstance.interceptors.response.use(
   },
   function (error) {
     if (error.response) {
-      alert(error.response.message);
+      console.log(error.response.message);
     }
 
     throw new Error(error);
