@@ -22,7 +22,7 @@ export const ViewProduct = () => {
   const [productData, setProductData] = useState<Product>();
   const navigate = useNavigate();
   const [addFavorite, setAddFavorite] = useState(false);
-  const { favorites, setFavorites } = useFavorite();
+  const { setFavorites } = useFavorite();
   const getProductDetails = async () => {
     try {
       const response = await fetch(
@@ -47,10 +47,21 @@ export const ViewProduct = () => {
     const userArray = getData();
     const userIndex = userArray.findIndex((user: User) => user.id === userId);
     if (userIndex === -1) return;
-    const demoFavorites = new Set([...favorites, productData!]);
-    userArray[userIndex].favorites = [...demoFavorites];
+    let favoritesArray: Product[] = userArray[userIndex].favorites;
+    let present: boolean = false;
+    userArray[userIndex].favorites.forEach((favorite: Product) => {
+      if (favorite.id === productData!.id) {
+        present = true;
+        return;
+      }
+    });
+    if (!present) {
+      favoritesArray = [...favoritesArray, productData!];
+      userArray[userIndex].favorites = [...favoritesArray];
+    }
+
     setData(userArray);
-    setFavorites([...demoFavorites]);
+    setFavorites([...favoritesArray]);
     setAddFavorite((fav) => !fav);
     setTimeout(() => {
       setAddFavorite((fav) => !fav);
