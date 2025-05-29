@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import './App.css';
 import { RouteProtection } from './Components/RouteProtection/RouteProtection';
 import { ViewAllProductsWrapper } from './Components/ViewAllProducts/ViewAllProducts';
 import { Login } from './Components/Auth/Login/Login';
@@ -10,7 +9,7 @@ import Profile from './Components/Profile/Profile';
 
 function App() {
   return (
-    <>
+    <div>
       <Router>
         <Routes>
           <Route path="/" element={<RouteProtection />}>
@@ -23,7 +22,7 @@ function App() {
           <Route path="/signup" element={<SignUp />}></Route>
         </Routes>
       </Router>
-    </>
+    </div>
   );
 }
 

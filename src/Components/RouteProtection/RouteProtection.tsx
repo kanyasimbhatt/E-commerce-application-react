@@ -4,6 +4,7 @@ import { FavoriteProvider } from '../ViewProduct/FavoritesProvider';
 
 export const RouteProtection = () => {
   const id = localStorage.getItem('user-id');
+
   return (
     <>
       {id ? (

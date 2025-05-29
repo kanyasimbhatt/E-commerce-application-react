@@ -45,8 +45,8 @@ const ShowProductsRendering = ({
         flexGrow={1}
         gap={'50px'}
         justifyContent={'center'}
-        marginTop={'100px'}
-        marginBottom={'50px'}
+        paddingTop={'100px'}
+        paddingBottom={'50px'}
       >
         {products.map((product: Product) => (
           <Card
