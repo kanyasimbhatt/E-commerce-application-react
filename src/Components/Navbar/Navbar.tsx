@@ -1,21 +1,18 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import LightModeIcon from "@mui/icons-material/LightMode";
-import { useNavigate } from "react-router-dom";
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [lightMode, setLightMode] = React.useState(true);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -26,12 +23,12 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("user-id");
+    localStorage.removeItem('user-id');
     handleClose();
-    navigate("/login");
+    navigate('/login');
   };
   return (
-    <Box sx={{ flexGrow: 1, position: "fixed", top: 0, width: "100%" }}>
+    <Box sx={{ flexGrow: 1, position: 'fixed', top: 0, width: '100%' }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -46,20 +43,13 @@ export default function Navbar() {
           <Typography
             variant="h6"
             component="div"
-            fontWeight={"bold"}
+            fontWeight={'bold'}
             sx={{ flexGrow: 1 }}
           >
             Shopify
           </Typography>
 
           <div>
-            <IconButton
-              size="large"
-              color="inherit"
-              onClick={() => setLightMode((light) => !light)}
-            >
-              {lightMode ? <LightModeIcon /> : <DarkModeIcon />}
-            </IconButton>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -74,13 +64,13 @@ export default function Navbar() {
               id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
+                vertical: 'top',
+                horizontal: 'right',
               }}
               keepMounted
               transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
+                vertical: 'top',
+                horizontal: 'right',
               }}
               open={Boolean(anchorEl)}
               onClose={handleClose}
