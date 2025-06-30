@@ -1,29 +1,61 @@
-import { Route, Routes, useLocation } from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
-import { RouteProtectionWrapper } from './Components/RouteProtection/RouteProtection';
-import { ProductList } from './Components/Products/ProductList/ProductList';
-import { Login } from './Components/Auth/Login/Login';
-import { SignUp } from './Components/Auth/SignUp/SignUp';
-import { getData } from '../Utils/Store';
+import { Route, Routes } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+
+const RouteProtection = lazy(
+  () => import('./Components/RouteProtection/RouteProtection')
+);
+
+const ProductList = lazy(
+  () => import('./Components/Products/ProductList/ProductList')
+);
+
+const Login = lazy(() => import('./Components/Auth/Login/Login'));
+const SignUp = lazy(() => import('./Components/Auth/SignUp/SignUp'));
+const NotFound = lazy(() => import('./Components/NotFound/NotFound'));
 
 function App() {
-  const userId = getData('user-id');
-  const location = useLocation();
-
-  const from = location.state?.from?.pathname || '/';
   return (
     <Routes>
-      <Route element={<RouteProtectionWrapper userId={userId} />}>
-        <Route path="/" element={<ProductList />}></Route>
+      <Route
+        element={
+          <Suspense>
+            <RouteProtection />
+          </Suspense>
+        }
+      >
+        <Route
+          path="/"
+          element={
+            <Suspense>
+              <ProductList />
+            </Suspense>
+          }
+        />
       </Route>
       <Route
         path="/login"
-        element={userId ? <Navigate to={from} /> : <Login />}
-      ></Route>
+        element={
+          <Suspense>
+            <Login />
+          </Suspense>
+        }
+      />
       <Route
         path="/signup"
-        element={userId ? <Navigate to={from} /> : <SignUp />}
-      ></Route>
+        element={
+          <Suspense>
+            <SignUp />
+          </Suspense>
+        }
+      />
+      <Route
+        path="*"
+        element={
+          <Suspense>
+            <NotFound />
+          </Suspense>
+        }
+      />
     </Routes>
   );
 }
