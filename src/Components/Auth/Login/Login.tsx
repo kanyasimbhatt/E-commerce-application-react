@@ -22,7 +22,7 @@ type UserFormField = {
   password: string;
 };
 
-export const Login = () => {
+const Login = () => {
   const { isLoading } = useCheckAuth();
   const [showPassword, setShowPassword] = useState(false);
   const { setUserId } = useUsers();
@@ -139,3 +139,5 @@ export const Login = () => {
     </>
   );
 };
+
+export default Login;

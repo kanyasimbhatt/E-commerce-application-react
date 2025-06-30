@@ -47,7 +47,7 @@ const schema = z.object({
 
 type UserFormField = z.infer<typeof schema>;
 
-export const SignUp = () => {
+const SignUp = () => {
   const isLoading = useCheckAuth();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -222,3 +222,5 @@ export const SignUp = () => {
     </>
   );
 };
+
+export default SignUp;

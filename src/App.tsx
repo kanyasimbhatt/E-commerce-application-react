@@ -1,19 +1,61 @@
 import { Route, Routes } from 'react-router-dom';
-import RouteProtection from './Components/RouteProtection/RouteProtection';
-import ProductList from './Components/Products/ProductList/ProductList';
-import { Login } from './Components/Auth/Login/Login';
-import { SignUp } from './Components/Auth/SignUp/SignUp';
-import NotFound from './Components/NotFound/NotFound';
+import { lazy, Suspense } from 'react';
+
+const RouteProtection = lazy(
+  () => import('./Components/RouteProtection/RouteProtection')
+);
+
+const ProductList = lazy(
+  () => import('./Components/Products/ProductList/ProductList')
+);
+
+const Login = lazy(() => import('./Components/Auth/Login/Login'));
+const SignUp = lazy(() => import('./Components/Auth/SignUp/SignUp'));
+const NotFound = lazy(() => import('./Components/NotFound/NotFound'));
 
 function App() {
   return (
     <Routes>
-      <Route element={<RouteProtection />}>
-        <Route path="/" element={<ProductList />} />
+      <Route
+        element={
+          <Suspense>
+            <RouteProtection />
+          </Suspense>
+        }
+      >
+        <Route
+          path="/"
+          element={
+            <Suspense>
+              <ProductList />
+            </Suspense>
+          }
+        />
       </Route>
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="*" element={<NotFound />} />
+      <Route
+        path="/login"
+        element={
+          <Suspense>
+            <Login />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/signup"
+        element={
+          <Suspense>
+            <SignUp />
+          </Suspense>
+        }
+      />
+      <Route
+        path="*"
+        element={
+          <Suspense>
+            <NotFound />
+          </Suspense>
+        }
+      />
     </Routes>
   );
 }
