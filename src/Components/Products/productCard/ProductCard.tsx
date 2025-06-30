@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { type Product } from '../../../Types/ProductType';
 import ProductCardUI from './ProductCardUI';
 
-type ChildrenType = {
+type ProductCardLogicProps = {
   product: Product;
 };
 
-const ProductCardLogic = ({ product }: ChildrenType) => {
+const ProductCardLogic = ({ product }: ProductCardLogicProps) => {
   const [share, setShowShare] = useState(false);
   const [productIdSelected, setProductIdSelected] = useState(0);
 

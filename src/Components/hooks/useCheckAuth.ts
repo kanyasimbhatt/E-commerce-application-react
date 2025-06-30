@@ -1,7 +1,7 @@
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getData } from '../../Utils/Store';
 import type { User } from '../../Types/UserType';
-import { useNavigate } from 'react-router-dom';
 
 const useCheckAuth = () => {
   const [isLoading, setIsLoading] = useState(true);

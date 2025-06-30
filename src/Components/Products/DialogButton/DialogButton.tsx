@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import DialogButtonUI from './DialogButtonUI';
 
-type ChildrenType = {
+type DialogButtonLogicProps = {
   share: boolean;
   setShowShare: React.Dispatch<React.SetStateAction<boolean>>;
   productIdSelected: number;
@@ -11,7 +11,7 @@ const DialogButtonLogic = ({
   share,
   productIdSelected,
   setShowShare,
-}: ChildrenType) => {
+}: DialogButtonLogicProps) => {
   const [saveClipboard, setSaveClipboard] = useState(false);
 
   const handleSaveToClipboard = useCallback(async () => {

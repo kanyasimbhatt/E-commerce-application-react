@@ -13,7 +13,7 @@ import {
 import { type Product } from '../../../Types/ProductType';
 import DialogButton from '../DialogButton/DialogButton';
 
-type ChildrenType = {
+type ProductCardProps = {
   product: Product;
   share: boolean;
   handleShare: (productId: number) => void;
@@ -27,7 +27,7 @@ const ProductCard = ({
   handleShare,
   productIdSelected,
   setShowShare,
-}: ChildrenType) => {
+}: ProductCardProps) => {
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),

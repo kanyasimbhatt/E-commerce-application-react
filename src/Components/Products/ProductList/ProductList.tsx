@@ -22,9 +22,5 @@ export default function ProductList() {
     setProductsInState();
   }, []);
 
-  return (
-    <>
-      <ProductListUI products={products} />
-    </>
-  );
+  return <ProductListUI products={products} />;
 }

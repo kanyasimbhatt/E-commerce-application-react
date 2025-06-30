@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 export type UsersArrayType = {
   userId: string;

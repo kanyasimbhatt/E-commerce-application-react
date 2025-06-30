@@ -1,12 +1,12 @@
 import { ErrorBoundary } from 'react-error-boundary';
+import Stack from '@mui/material/Stack';
 import Navbar from '../Components/Navbar/Navbar';
-import { Stack } from '@mui/material';
 
-type ChildrenType = {
+type ApplicationLayoutProps = {
   children: React.ReactNode;
 };
 
-const ApplicationLayout = ({ children }: ChildrenType) => {
+const ApplicationLayout = ({ children }: ApplicationLayoutProps) => {
   return (
     <>
       <Navbar />

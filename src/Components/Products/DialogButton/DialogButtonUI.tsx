@@ -2,7 +2,7 @@ import { IconButton } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
-type ChildrenType = {
+type DialogButtonProps = {
   share: boolean;
   saveClipboard: boolean;
   handleSaveToClipboard: () => void;
@@ -12,7 +12,7 @@ const DialogButton = ({
   share,
   saveClipboard,
   handleSaveToClipboard,
-}: ChildrenType) => {
+}: DialogButtonProps) => {
   return (
     <IconButton onClick={handleSaveToClipboard} disabled={!share}>
       {saveClipboard ? (
