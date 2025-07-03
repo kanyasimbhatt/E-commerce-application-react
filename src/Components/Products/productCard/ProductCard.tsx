@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { type Product } from '../../../Types/ProductType';
 import ProductCardUI from './ProductCardUI';
-import { useNavigate } from 'react-router-dom';
 
 type ProductCardLogicProps = {
   product: Product;

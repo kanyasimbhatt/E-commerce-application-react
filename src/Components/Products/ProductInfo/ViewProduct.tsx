@@ -8,9 +8,8 @@ import { Button, Rating, Stack } from '@mui/material';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import type { Product } from '../../../Types/ProductType';
 import { Box } from '@mui/material';
-import Navbar from '../../Navbar/Navbar';
+import type { Product } from '../../../Types/ProductType';
 import { useFavorite } from './FavoritesProvider';
 import { useUsers } from '../../Auth/userProvider';
 import { getData, setData } from '../../../Utils/Store';
@@ -70,97 +69,94 @@ const ViewProduct = () => {
   }, []);
 
   return (
-    <>
-      <Navbar />
-      <Box
+    <Box
+      sx={{
+        maxWidth: '100%',
+        minHeight: '90vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 2,
+      }}
+    >
+      <Card
         sx={{
-          maxWidth: '100%',
-          minHeight: '90vh',
           display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: 2,
+          flexDirection: { xs: 'column', md: 'row' },
+          maxWidth: 900,
+          width: '100%',
+          boxShadow: 3,
         }}
       >
-        <Card
+        <CardMedia
+          component="img"
+          sx={{
+            width: { xs: '100%', md: 400 },
+            height: { xs: 250, md: 'auto' },
+            objectFit: 'cover',
+          }}
+          image={productData?.images[0]}
+          alt={productData?.title}
+        />
+
+        <CardContent
           sx={{
             display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
-            maxWidth: 900,
-            width: '100%',
-            boxShadow: 3,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            padding: 3,
+            flex: 1,
           }}
         >
-          <CardMedia
-            component="img"
-            sx={{
-              width: { xs: '100%', md: 400 },
-              height: { xs: 250, md: 'auto' },
-              objectFit: 'cover',
-            }}
-            image={productData?.images[0]}
-            alt={productData?.title}
+          <Typography gutterBottom variant="h5" component="div">
+            {productData?.title}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
+            {productData?.description}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
+            Price: ${productData?.price}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
+            Category: {productData?.category}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
+            Brand: {productData?.brand}
+          </Typography>
+          <Rating
+            name="read-only"
+            value={productData?.rating ?? 0}
+            precision={0.5}
+            readOnly
           />
 
-          <CardContent
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              padding: 3,
-              flex: 1,
-            }}
-          >
-            <Typography gutterBottom variant="h5" component="div">
-              {productData?.title}
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
-              {productData?.description}
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
-              Price: ${productData?.price}
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
-              Category: {productData?.category}
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
-              Brand: {productData?.brand}
-            </Typography>
-            <Rating
-              name="read-only"
-              value={productData?.rating ?? 0}
-              precision={0.5}
-              readOnly
-            />
-
-            <Stack direction={'row'} gap={2} mt={2}>
-              <Button
-                size="small"
-                variant="contained"
-                sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}
-                onClick={handleClickOnBack}
-              >
-                Go Back <ExitToAppIcon fontSize="small" />
-              </Button>
-              <Button
-                size="small"
-                variant="contained"
-                sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}
-                onClick={handleClickOnFavorite}
-                disabled={isAddFavorite}
-              >
-                Add to Wishlist{' '}
-                {isAddFavorite ? (
-                  <CheckCircleRoundedIcon sx={{ color: '#57d446' }} />
-                ) : (
-                  <FavoriteIcon fontSize="small" />
-                )}
-              </Button>
-            </Stack>
-          </CardContent>
-        </Card>
-      </Box>
-    </>
+          <Stack direction={'row'} gap={2} mt={2}>
+            <Button
+              size="small"
+              variant="contained"
+              sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+              onClick={handleClickOnBack}
+            >
+              Go Back <ExitToAppIcon fontSize="small" />
+            </Button>
+            <Button
+              size="small"
+              variant="contained"
+              sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+              onClick={handleClickOnFavorite}
+              disabled={isAddFavorite}
+            >
+              Add to Wishlist{' '}
+              {isAddFavorite ? (
+                <CheckCircleRoundedIcon sx={{ color: '#57d446' }} />
+              ) : (
+                <FavoriteIcon fontSize="small" />
+              )}
+            </Button>
+          </Stack>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 

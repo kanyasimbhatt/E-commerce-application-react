@@ -4,7 +4,6 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, Stack } from '@mui/material';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import Navbar from '../../Navbar/Navbar';
 import { useUsers } from '../../Auth/userProvider';
 import { getData, setData } from '../../../Utils/Store';
 import type { User } from '../../../Types/UserType';
@@ -28,77 +27,68 @@ function ViewFavorites() {
     setFavorites([...userData.favorites]);
   };
   return (
-    <div>
-      <Navbar />
-      <Stack
-        spacing={3}
-        display={'flex'}
-        flexDirection={'column'}
-        alignItems={'center'}
-        marginTop={'100px'}
-      >
-        {favorites.length === 0 && (
-          <Typography variant="h5">No Records Found</Typography>
-        )}
-        {favorites.map((favorite) => (
-          <Card
+    <Stack
+      spacing={3}
+      display={'flex'}
+      flexDirection={'column'}
+      alignItems={'center'}
+      marginTop={'100px'}
+    >
+      {favorites.length === 0 && (
+        <Typography variant="h5">No Records Found</Typography>
+      )}
+      {favorites.map((favorite) => (
+        <Card
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            maxWidth: 1200,
+            boxShadow: 3,
+          }}
+          key={favorite.id}
+        >
+          <CardMedia
+            component="img"
+            sx={{
+              width: { xs: 150, md: 200 },
+              height: { xs: 150, md: 'auto' },
+              objectFit: 'cover',
+            }}
+            image={favorite.images[0]}
+            alt={favorite.title}
+          />
+
+          <CardContent
             sx={{
               display: 'flex',
-              flexDirection: { xs: 'column', md: 'row' },
-              maxWidth: 1200,
-              boxShadow: 3,
+              flexDirection: 'column',
+              justifyContent: 'center',
+              padding: 3,
+              flex: 1,
             }}
-            key={favorite.id}
           >
-            <CardMedia
-              component="img"
-              sx={{
-                width: { xs: 150, md: 200 },
-                height: { xs: 150, md: 'auto' },
-                objectFit: 'cover',
-              }}
-              image={favorite.images[0]}
-              alt={favorite.title}
-            />
+            <Typography gutterBottom variant="h5" component="div">
+              {favorite.title}
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
+              {favorite.description}
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
+              Price: ${favorite.price}
+            </Typography>
 
-            <CardContent
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                padding: 3,
-                flex: 1,
-              }}
+            <Button
+              size="small"
+              variant="contained"
+              sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+              onClick={() => handleClickOnRemove(favorite.id)}
             >
-              <Typography gutterBottom variant="h5" component="div">
-                {favorite.title}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: 'text.secondary', mb: 1 }}
-              >
-                {favorite.description}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: 'text.secondary', mb: 1 }}
-              >
-                Price: ${favorite.price}
-              </Typography>
-
-              <Button
-                size="small"
-                variant="contained"
-                sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}
-                onClick={() => handleClickOnRemove(favorite.id)}
-              >
-                Remove <RemoveCircleIcon fontSize="small" />
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </Stack>
-    </div>
+              Remove <RemoveCircleIcon fontSize="small" />
+            </Button>
+          </CardContent>
+        </Card>
+      ))}
+    </Stack>
   );
 }
 

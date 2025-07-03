@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import type { Product } from '../../../Types/ProductType';
 import { createContext, useContext } from 'react';
+import type { Product } from '../../../Types/ProductType';
 import { useUsers } from '../../Auth/userProvider';
 import { getData } from '../../../Utils/Store';
 import type { User } from '../../../Types/UserType';
@@ -14,11 +14,13 @@ const FavoriteContext = createContext<FavoritesArrayType>({
   setFavorites: () => {},
 });
 
-type ChildrenType = {
+type FavoritesProviderProps = {
   children: React.ReactNode;
 };
 
-export const FavoriteProvider: React.FC<ChildrenType> = ({ children }) => {
+export const FavoriteProvider: React.FC<FavoritesProviderProps> = ({
+  children,
+}) => {
   const { userId } = useUsers();
   const userArray = getData('users-array');
   const userData = userArray.find((user: User) => user.id === userId);
