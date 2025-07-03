@@ -10,6 +10,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { useNavigate } from 'react-router-dom';
+import { removeData } from '../../Utils/Store';
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -21,11 +22,11 @@ export default function Navbar() {
 
   const handleClose = () => {
     setAnchorEl(null);
-    navigate('/profile')
+    navigate('/profile');
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('user-id');
+    removeData('user-id');
     handleClose();
     navigate('/login');
   };

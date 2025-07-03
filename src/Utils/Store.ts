@@ -22,3 +22,7 @@ export function setData<T extends User[] | string>(key: string, userData: T) {
   }
   localStorage.setItem(key, JSON.stringify(userData));
 }
+
+export function removeData(key: string) {
+  localStorage.removeItem(key);
+}

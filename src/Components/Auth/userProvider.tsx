@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react';
+import { getData } from '../../Utils/Store';
 
 export type UsersArrayType = {
   userId: string;
@@ -14,7 +15,7 @@ type UserProviderProps = {
 };
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const userData = JSON.parse(localStorage.getItem('user-id') as string) || '';
+  const userData = getData('user-id') || '';
   const [userId, setUserId] = useState<string>(userData);
   return (
     <UserContext.Provider value={{ userId, setUserId }}>

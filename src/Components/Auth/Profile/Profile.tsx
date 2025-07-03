@@ -7,110 +7,110 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Box, Button, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import type { User } from '../../../Types/UserType';
+import { getData, removeData, setData } from '../../../Utils/Store';
 
 export default function Profile() {
   const navigate = useNavigate();
-  const id = localStorage.getItem('user-id');
-  const userArray = JSON.parse(localStorage.getItem('users-array') as string);
-  const userData = userArray.find((user: User) => user.id === id);
-  const userDataIndex = userArray.findIndex((user: User) => user.id === id);
+  const userId = getData('user-id');
+  const userArray = getData('users-array');
+  const userDataIndex = userArray.findIndex((user: User) => user.id === userId);
+  const userData = userArray[userDataIndex];
 
   const handleClickOnDelete = () => {
     userArray.splice(userDataIndex, 1);
-    localStorage.setItem('users-array', JSON.stringify(userArray));
+    setData('users-array', userArray);
     handleClickOnLogout();
   };
 
   const handleClickOnLogout = () => {
-    localStorage.removeItem('user-id');
+    removeData('user-id');
     navigate('/');
   };
+
   return (
-    <div>
-      <Box
+    <Box
+      sx={{
+        maxWidth: '100%',
+        minHeight: '90vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 2,
+      }}
+    >
+      <Card
         sx={{
-          maxWidth: '100%',
-          minHeight: '90vh',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: 2,
+          flexDirection: { xs: 'column', md: 'row' },
+          padding: '100px',
+          gap: '50px',
+          maxWidth: 500,
+          width: '100%',
+          boxShadow: 3,
         }}
       >
-        <Card
+        <AccountCircleIcon
+          color="primary"
+          sx={{ height: '100px', width: '100px' }}
+        />
+
+        <CardContent
           sx={{
             display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: { xs: 'column', md: 'row' },
-            padding: '100px',
-            gap: '50px',
-            maxWidth: 500,
-            width: '100%',
-            boxShadow: 3,
+            flexDirection: 'column',
+            padding: 3,
+            flex: 1,
           }}
         >
-          <AccountCircleIcon
-            color="primary"
-            sx={{ height: '100px', width: '100px' }}
-          />
-
-          <CardContent
+          <Typography
+            gutterBottom
+            variant="h5"
+            component="div"
+            sx={{ textAlign: { xs: 'center', md: 'left' } }}
+          >
+            {userData?.name}
+          </Typography>
+          <Typography
+            variant="body1"
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              padding: 3,
-              flex: 1,
+              color: 'text.secondary',
+              mb: 1,
+              textAlign: { xs: 'center', md: 'left' },
             }}
           >
-            <Typography
-              gutterBottom
-              variant="h5"
-              component="div"
-              sx={{ textAlign: { xs: 'center', md: 'left' } }}
-            >
-              {userData?.name}
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                color: 'text.secondary',
-                mb: 1,
-                textAlign: { xs: 'center', md: 'left' },
-              }}
-            >
-              Email: {userData?.email}
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                color: 'text.secondary',
-                mb: 1,
-                textAlign: { xs: 'center', md: 'left' },
-              }}
-            >
-              Phone Number: +91 {userData?.phoneNumber}
-            </Typography>
+            Email: {userData?.email}
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              color: 'text.secondary',
+              mb: 1,
+              textAlign: { xs: 'center', md: 'left' },
+            }}
+          >
+            Phone Number: +91 {userData?.phoneNumber}
+          </Typography>
 
-            <Stack direction={'row'} gap={'20px'} marginTop={'10px'} flex={1}>
-              <Button
-                variant="contained"
-                size="small"
-                onClick={handleClickOnLogout}
-              >
-                LogOut <LogoutIcon />
-              </Button>
-              <Button
-                variant="contained"
-                size="small"
-                onClick={handleClickOnDelete}
-              >
-                Delete <DeleteIcon />
-              </Button>
-            </Stack>
-          </CardContent>
-        </Card>
-      </Box>
-    </div>
+          <Stack direction={'row'} gap={'20px'} marginTop={'10px'} flex={1}>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={handleClickOnLogout}
+            >
+              LogOut <LogoutIcon />
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={handleClickOnDelete}
+            >
+              Delete <DeleteIcon />
+            </Button>
+          </Stack>
+        </CardContent>
+      </Card>
+    </Box>
   );
 }
