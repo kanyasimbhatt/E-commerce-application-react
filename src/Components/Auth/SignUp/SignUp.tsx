@@ -13,9 +13,11 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
-import { getData, setData } from '../../../Store/Store';
-import type { User } from '../../Types/UserType';
+import { getData, addData, setData } from '../../../Utils/Store';
+import type { User } from '../../../Types/UserType';
 import { useUsers } from '../userProvider';
+import useCheckAuth from '../../hooks/useCheckAuth';
+import { Loading } from '../../Loading/Loading';
 
 const schema = z.object({
   id: z.string(),
@@ -45,7 +47,8 @@ const schema = z.object({
 
 type UserFormField = z.infer<typeof schema>;
 
-export const SignUp = () => {
+const SignUp = () => {
+  const { isLoading } = useCheckAuth();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { setUserId } = useUsers();
@@ -98,7 +101,7 @@ export const SignUp = () => {
   };
 
   const onSubmit: SubmitHandler<UserFormField> = (data) => {
-    const userArray = getData();
+    const userArray = getData('users-array') || [];
     const present = userArray.some((user: User) => user.email === data.email);
     if (present) {
       setError('root', {
@@ -108,106 +111,116 @@ export const SignUp = () => {
       return;
     }
     const id = crypto.randomUUID();
-    setData({ ...data, id, favorites: [] });
+    addData('users-array', { ...data, id, favorites: [] });
     setUserId(id);
-    localStorage.setItem('user-id', id);
+    setData('user-id', id);
     navigate('/');
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack
-        direction={'column'}
-        spacing={3}
-        maxWidth={'600px'}
-        margin={'auto'}
-        marginTop={'80px'}
-        padding={'80px'}
-        boxShadow={'0px 0px 20px gray'}
-        borderRadius={'7px'}
-      >
-        <Typography variant="h4" textAlign={'center'}>
-          Sign Up
-        </Typography>
-        <Stack>
-          <TextField
-            {...register('name')}
-            type="text"
-            label="Full Name"
-            variant="outlined"
-            color="primary"
-            size="medium"
-            required
-          ></TextField>
-          {errors.name && (
-            <Typography color="error">{errors.name.message}</Typography>
-          )}
-        </Stack>
-
-        <Stack>
-          <TextField
-            {...register('email')}
-            type="email"
-            label="Email"
-            variant="outlined"
-            color="primary"
-            size="medium"
-            required
-          ></TextField>
-          {errors.email && (
-            <Typography color="error">{errors.email.message}</Typography>
-          )}
-        </Stack>
-        <Stack>
-          <TextField
-            {...register('phoneNumber')}
-            type="text"
-            label="Phone Number"
-            variant="outlined"
-            color="primary"
-            slotProps={slotPropsForPhoneNumber}
-            size="medium"
-            required
-          ></TextField>
-          {errors.phoneNumber && (
-            <Typography color="error">{errors.phoneNumber.message}</Typography>
-          )}
-        </Stack>
-        <Stack>
-          <TextField
-            {...register('password')}
-            type={showPassword ? 'text' : 'password'}
-            label="Password"
-            slotProps={slotPropsForPassword}
-            variant="outlined"
-            color="primary"
-            size="medium"
-            helperText="Do not share your password with anyone"
-            required
-          ></TextField>
-          {errors.password && (
-            <Typography color="error">{errors.password.message}</Typography>
-          )}
-        </Stack>
-
-        <Stack>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            size="large"
-            disabled={isSubmitting}
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack
+            direction={'column'}
+            spacing={3}
+            maxWidth={'600px'}
+            margin={'auto'}
+            marginTop={'80px'}
+            padding={'80px'}
+            boxShadow={'0px 0px 20px gray'}
+            borderRadius={'7px'}
           >
-            {isSubmitting ? 'Loading...' : 'Sign Up'}
-          </Button>
-          {errors.root && (
-            <Typography color="error">{errors.root.message}</Typography>
-          )}
-          <Typography variant="subtitle2" color="gray">
-            Already a user: <a href="/login">Login</a>
-          </Typography>
-        </Stack>
-      </Stack>
-    </form>
+            <Typography variant="h4" textAlign={'center'}>
+              Sign Up
+            </Typography>
+            <Stack>
+              <TextField
+                {...register('name')}
+                type="text"
+                label="Full Name"
+                variant="outlined"
+                color="primary"
+                size="medium"
+                required
+              ></TextField>
+              {errors.name && (
+                <Typography color="error">{errors.name.message}</Typography>
+              )}
+            </Stack>
+
+            <Stack>
+              <TextField
+                {...register('email')}
+                type="email"
+                label="Email"
+                variant="outlined"
+                color="primary"
+                size="medium"
+                required
+              ></TextField>
+              {errors.email && (
+                <Typography color="error">{errors.email.message}</Typography>
+              )}
+            </Stack>
+            <Stack>
+              <TextField
+                {...register('phoneNumber')}
+                type="text"
+                label="Phone Number"
+                variant="outlined"
+                color="primary"
+                slotProps={slotPropsForPhoneNumber}
+                size="medium"
+                required
+              ></TextField>
+              {errors.phoneNumber && (
+                <Typography color="error">
+                  {errors.phoneNumber.message}
+                </Typography>
+              )}
+            </Stack>
+            <Stack>
+              <TextField
+                {...register('password')}
+                type={showPassword ? 'text' : 'password'}
+                label="Password"
+                slotProps={slotPropsForPassword}
+                variant="outlined"
+                color="primary"
+                size="medium"
+                helperText="Do not share your password with anyone"
+                required
+              ></TextField>
+              {errors.password && (
+                <Typography color="error">{errors.password.message}</Typography>
+              )}
+            </Stack>
+
+            <Stack>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                size="large"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Loading...' : 'Sign Up'}
+              </Button>
+              {errors.root && (
+                <Typography color="error">{errors.root.message}</Typography>
+              )}
+              <Typography variant="subtitle2" color="gray">
+                Already a user: <a href="/login">Login</a>
+              </Typography>
+            </Stack>
+          </Stack>
+        </form>
+      )}
+    </>
   );
 };
+
+export default SignUp;

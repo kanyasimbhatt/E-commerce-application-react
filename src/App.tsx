@@ -1,29 +1,92 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import './App.css';
-import { RouteProtection } from './Components/RouteProtection/RouteProtection';
-import { ViewAllProducts } from './Components/ViewAllProducts/ViewAllProducts';
-import { Login } from './Components/Auth/Login/Login';
-import { SignUp } from './Components/Auth/SignUp/SignUp';
-import { ViewProduct } from './Components/ViewProduct/ViewProduct';
-import ViewFavorites from './Components/ViewFavorite/ViewFavorites';
-import Profile from './Components/Profile/Profile';
+import { Route, Routes } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+
+const RouteProtection = lazy(
+  () => import('./Components/RouteProtection/RouteProtection')
+);
+const ProductList = lazy(
+  () => import('./Components/Products/ProductList/ProductList')
+);
+const Login = lazy(() => import('./Components/Auth/Login/Login'));
+const SignUp = lazy(() => import('./Components/Auth/SignUp/SignUp'));
+const NotFound = lazy(() => import('./Components/NotFound/NotFound'));
+const ViewProduct = lazy(
+  () => import('./Components/Products/ProductInfo/ViewProduct')
+);
+const ViewFavorites = lazy(
+  () => import('./Components/Products/ViewFavorite/ViewFavorites')
+);
+const Profile = lazy(() => import('./Components/Auth/Profile/Profile'));
 
 function App() {
   return (
-    <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<RouteProtection />}>
-            <Route path="/" element={<ViewAllProducts />}></Route>
-            <Route path="/product/:productId" element={<ViewProduct />}></Route>
-            <Route path="/favorites" element={<ViewFavorites />}></Route>
-          </Route>
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/signup" element={<SignUp />}></Route>
-          <Route path="/profile" element={<Profile />}></Route>
-        </Routes>
-      </Router>
-    </>
+    <Routes>
+      <Route
+        element={
+          <Suspense>
+            <RouteProtection />
+          </Suspense>
+        }
+      >
+        <Route
+          path="/"
+          element={
+            <Suspense>
+              <ProductList />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/product/:productId"
+          element={
+            <Suspense>
+              <ViewProduct />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/favorites"
+          element={
+            <Suspense>
+              <ViewFavorites />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <Suspense>
+              <Profile />
+            </Suspense>
+          }
+        />
+      </Route>
+      <Route
+        path="/login"
+        element={
+          <Suspense>
+            <Login />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/signup"
+        element={
+          <Suspense>
+            <SignUp />
+          </Suspense>
+        }
+      />
+      <Route
+        path="*"
+        element={
+          <Suspense>
+            <NotFound />
+          </Suspense>
+        }
+      />
+    </Routes>
   );
 }
 

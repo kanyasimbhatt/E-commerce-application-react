@@ -1,10 +1,19 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter as Router } from 'react-router-dom';
+import './index.css';
+import { UserProvider } from './Components/Auth/userProvider.tsx';
+import App from './App.tsx';
+import { FavoriteProvider } from './Components/Products/ProductInfo/FavoritesProvider.tsx';
+import ApplicationLayout from './Layout/Layout.tsx';
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+  <Router>
+    <UserProvider>
+      <FavoriteProvider>
+        <ApplicationLayout>
+          <App />
+        </ApplicationLayout>
+      </FavoriteProvider>
+    </UserProvider>
+  </Router>
+);

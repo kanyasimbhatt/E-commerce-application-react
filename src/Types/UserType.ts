@@ -1,4 +1,4 @@
-import { type Product } from '../ViewAllProducts/ViewAllProducts';
+import type { Product } from './ProductType';
 
 export type User = {
   id: string;
