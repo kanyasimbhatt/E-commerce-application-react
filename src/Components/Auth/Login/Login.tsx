@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { type User } from '../../../Types/UserType';
 import { getData, setData } from '../../../Utils/Store';
 import { useUsers } from '../userProvider';
-import useCheckAuth from '../../hooks/useCheckAuth';
+import useCheckAuth from '../../../hooks/useCheckAuth';
 import { Loading } from '../../Loading/Loading';
 
 type UserFormField = {

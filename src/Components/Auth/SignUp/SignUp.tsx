@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { getData, addData, setData } from '../../../Utils/Store';
 import type { User } from '../../../Types/UserType';
 import { useUsers } from '../userProvider';
-import useCheckAuth from '../../hooks/useCheckAuth';
+import useCheckAuth from '../../../hooks/useCheckAuth';
 import { Loading } from '../../Loading/Loading';
 
 const schema = z.object({
