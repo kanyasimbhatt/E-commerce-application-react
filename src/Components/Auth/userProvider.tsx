@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react';
+import { getData } from '../../Utils/Store';
 
 export type UsersArrayType = {
   userId: string;
@@ -9,12 +10,12 @@ const UserContext = createContext<UsersArrayType>({
   setUserId: () => {},
 });
 
-type ChildrenType = {
+type UserProviderProps = {
   children: React.ReactNode;
 };
 
-export const UserProvider: React.FC<ChildrenType> = ({ children }) => {
-  const userData = localStorage.getItem('user-id') || '';
+export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
+  const userData = getData('user-id') || '';
   const [userId, setUserId] = useState<string>(userData);
   return (
     <UserContext.Provider value={{ userId, setUserId }}>

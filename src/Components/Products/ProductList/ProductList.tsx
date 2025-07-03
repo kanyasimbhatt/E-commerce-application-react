@@ -3,6 +3,7 @@ import { useErrorBoundary } from 'react-error-boundary';
 import { type Product } from '../../../Types/ProductType';
 import { axiosInstance } from '../../../Services/axiosInterceptor';
 import ProductListUI from './ProductListUI';
+import ApplicationLayout from '../../../Layout/Layout';
 
 export default function ProductList() {
   const [products, setProducts] = useState<Array<Product>>([]);
@@ -22,5 +23,9 @@ export default function ProductList() {
     setProductsInState();
   }, []);
 
-  return <ProductListUI products={products} />;
+  return (
+    <ApplicationLayout>
+      <ProductListUI products={products} />
+    </ApplicationLayout>
+  );
 }

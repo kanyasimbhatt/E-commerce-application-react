@@ -13,11 +13,11 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
-import { getData, setData } from '../../../Utils/Store';
+import { getData, addData, setData } from '../../../Utils/Store';
 import type { User } from '../../../Types/UserType';
 import { useUsers } from '../userProvider';
-import useCheckAuth from '../../hooks/useCheckAuth';
-import { Loading } from '../../Products/ProductList/ProductListUI';
+import useCheckAuth from '../../../hooks/useCheckAuth';
+import { Loading } from '../../Loading/Loading';
 
 const schema = z.object({
   id: z.string(),
@@ -48,7 +48,7 @@ const schema = z.object({
 type UserFormField = z.infer<typeof schema>;
 
 const SignUp = () => {
-  const isLoading = useCheckAuth();
+  const { isLoading } = useCheckAuth();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { setUserId } = useUsers();
@@ -111,9 +111,9 @@ const SignUp = () => {
       return;
     }
     const id = crypto.randomUUID();
-    setData<User>('users-array', { ...data, id, favorites: [] });
+    addData('users-array', { ...data, id, favorites: [] });
     setUserId(id);
-    setData<string>('user-id', id);
+    setData('user-id', id);
     navigate('/');
   };
 

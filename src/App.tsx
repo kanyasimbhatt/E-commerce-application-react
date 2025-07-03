@@ -4,14 +4,19 @@ import { lazy, Suspense } from 'react';
 const RouteProtection = lazy(
   () => import('./Components/RouteProtection/RouteProtection')
 );
-
 const ProductList = lazy(
   () => import('./Components/Products/ProductList/ProductList')
 );
-
 const Login = lazy(() => import('./Components/Auth/Login/Login'));
 const SignUp = lazy(() => import('./Components/Auth/SignUp/SignUp'));
 const NotFound = lazy(() => import('./Components/NotFound/NotFound'));
+const ViewProduct = lazy(
+  () => import('./Components/Products/ProductInfo/ViewProduct')
+);
+const ViewFavorites = lazy(
+  () => import('./Components/Products/ViewFavorite/ViewFavorites')
+);
+const Profile = lazy(() => import('./Components/Auth/Profile/Profile'));
 
 function App() {
   return (
@@ -28,6 +33,31 @@ function App() {
           element={
             <Suspense>
               <ProductList />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/product/:productId"
+          element={
+            <Suspense>
+              <ViewProduct />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/favorites"
+          element={
+            <Suspense>
+              <ViewFavorites />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <Suspense>
+              <Profile />
             </Suspense>
           }
         />
