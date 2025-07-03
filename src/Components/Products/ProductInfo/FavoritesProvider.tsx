@@ -22,10 +22,9 @@ export const FavoriteProvider: React.FC<FavoritesProviderProps> = ({
   children,
 }) => {
   const { userId } = useUsers();
-  const userArray = getData('users-array');
+  const userArray = getData('users-array') || [];
   const userData = userArray.find((user: User) => user.id === userId);
-
-  const favoritesArray = userData.favorites || [];
+  const favoritesArray = userArray.length === 0 ? [] : userData.favorites;
   const [favorites, setFavorites] = useState<Product[]>(favoritesArray);
   return (
     <FavoriteContext.Provider value={{ favorites, setFavorites }}>

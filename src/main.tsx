@@ -4,15 +4,12 @@ import './index.css';
 import { UserProvider } from './Components/Auth/userProvider.tsx';
 import App from './App.tsx';
 import { FavoriteProvider } from './Components/Products/ProductInfo/FavoritesProvider.tsx';
-import ApplicationLayout from './Layout/Layout.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <Router>
     <UserProvider>
       <FavoriteProvider>
-        <ApplicationLayout>
-          <App />
-        </ApplicationLayout>
+        <App />
       </FavoriteProvider>
     </UserProvider>
   </Router>

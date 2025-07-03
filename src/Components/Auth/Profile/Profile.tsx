@@ -3,11 +3,10 @@ import CardContent from '@mui/material/CardContent';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Typography from '@mui/material/Typography';
-import { type User } from '../Types/UserType';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Box, Button, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../Navbar/Navbar';
+import type { User } from '../../../Types/UserType';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -28,7 +27,6 @@ export default function Profile() {
   };
   return (
     <div>
-      <Navbar />
       <Box
         sx={{
           maxWidth: '100%',
