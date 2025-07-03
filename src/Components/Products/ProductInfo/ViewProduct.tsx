@@ -13,7 +13,7 @@ import { Box } from '@mui/material';
 import Navbar from '../../Navbar/Navbar';
 import { useFavorite } from './FavoritesProvider';
 import { useUsers } from '../../Auth/userProvider';
-import { getData, setData } from '../../../Store/Store';
+import { getData, setData } from '../../../Utils/Store';
 import type { User } from '../../../Types/UserType';
 
 const ViewProduct = () => {
@@ -21,8 +21,8 @@ const ViewProduct = () => {
   const { userId } = useUsers();
   const [productData, setProductData] = useState<Product>();
   const navigate = useNavigate();
-  const [addFavorite, setAddFavorite] = useState(false);
-  const { favorites, setFavorites } = useFavorite();
+  const [isAddFavorite, setIsAddFavorite] = useState(false);
+  const { setFavorites } = useFavorite();
   const getProductDetails = async () => {
     try {
       const response = await fetch(
@@ -44,17 +44,25 @@ const ViewProduct = () => {
   };
 
   const handleClickOnFavorite = () => {
-    const userArray = getData();
+    const userArray = getData('users-array');
+
     const userIndex = userArray.findIndex((user: User) => user.id === userId);
     if (userIndex === -1) return;
-    const demoFavorites = new Set([...favorites, productData!]);
-    userArray[userIndex].favorites = [...demoFavorites];
-    setData(userArray);
-    setFavorites([...demoFavorites]);
-    setAddFavorite((fav) => !fav);
+
+    let userFavorites = userArray[userIndex].favorites;
+    userFavorites = userFavorites.filter(
+      (product: Product) => product.id !== productData!.id
+    );
+
+    userArray[userIndex].favorites = [...userFavorites, productData!];
+
+    setData('users-array', userArray);
+    setFavorites(userArray[userIndex].favorites);
+    setIsAddFavorite((fav) => !fav);
+
     setTimeout(() => {
-      setAddFavorite((fav) => !fav);
-    }, 3000);
+      setIsAddFavorite((fav) => !fav);
+    }, 2000);
   };
 
   useEffect(() => {
@@ -139,9 +147,10 @@ const ViewProduct = () => {
                 variant="contained"
                 sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}
                 onClick={handleClickOnFavorite}
+                disabled={isAddFavorite}
               >
                 Add to Wishlist{' '}
-                {addFavorite ? (
+                {isAddFavorite ? (
                   <CheckCircleRoundedIcon sx={{ color: '#57d446' }} />
                 ) : (
                   <FavoriteIcon fontSize="small" />

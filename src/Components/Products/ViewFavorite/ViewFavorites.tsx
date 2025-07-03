@@ -6,7 +6,7 @@ import { Button, Stack } from '@mui/material';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import Navbar from '../../Navbar/Navbar';
 import { useUsers } from '../../Auth/userProvider';
-import { getData, setData } from '../../../Store/Store';
+import { getData, setData } from '../../../Utils/Store';
 import type { User } from '../../../Types/UserType';
 import { useFavorite } from '../ProductInfo/FavoritesProvider';
 import type { Product } from '../../../Types/ProductType';
@@ -14,9 +14,9 @@ import type { Product } from '../../../Types/ProductType';
 function ViewFavorites() {
   const { userId } = useUsers();
   const { favorites, setFavorites } = useFavorite();
-
+  console.log(favorites);
   const handleClickOnRemove = (favoriteId: number) => {
-    const userArray = getData();
+    const userArray = getData('users-array');
     const userIndex = userArray.findIndex((user: User) => user.id === userId);
     const userData = userArray[userIndex];
     if (!userData) return;
@@ -24,7 +24,7 @@ function ViewFavorites() {
       (product: Product) => +product.id !== favoriteId
     );
     userArray[userIndex] = { ...userData };
-    setData(userArray);
+    setData('users-array', userArray);
     setFavorites([...userData.favorites]);
   };
   return (

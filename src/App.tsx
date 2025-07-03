@@ -4,11 +4,9 @@ import { lazy, Suspense } from 'react';
 const RouteProtection = lazy(
   () => import('./Components/RouteProtection/RouteProtection')
 );
-
 const ProductList = lazy(
   () => import('./Components/Products/ProductList/ProductList')
 );
-
 const Login = lazy(() => import('./Components/Auth/Login/Login'));
 const SignUp = lazy(() => import('./Components/Auth/SignUp/SignUp'));
 const NotFound = lazy(() => import('./Components/NotFound/NotFound'));

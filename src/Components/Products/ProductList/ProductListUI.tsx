@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import Stack from '@mui/material/Stack';
-import LinearProgress from '@mui/material/LinearProgress';
+import { Loading } from '../../Loading/Loading';
 import { type Product } from '../../../Types/ProductType';
 
 type RenderProductsProps = {
@@ -28,10 +28,6 @@ const RenderProducts = ({ products }: RenderProductsProps) => {
       ))}
     </Stack>
   );
-};
-
-export const Loading = () => {
-  return <LinearProgress />;
 };
 
 export default RenderProducts;

@@ -10,7 +10,7 @@ const useCheckAuth = () => {
 
   useEffect(() => {
     const userId = getData('user-id');
-    const userArray = JSON.parse(localStorage.getItem('users-array') as string);
+    const userArray = getData('users-array') || [];
 
     const userData = userArray.find((user: User) => user.id === userId);
     if (userData) {
