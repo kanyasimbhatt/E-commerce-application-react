@@ -1,20 +1,21 @@
 import { Outlet, Navigate } from 'react-router-dom';
-import { UserProvider } from '../Auth/userProvider';
-import { FavoriteProvider } from '../ViewProduct/FavoritesProvider';
+import Layout from '../../Layout/Layout';
+import { useUsers } from '../Auth/userProvider';
 
-export const RouteProtection = () => {
-  const id = localStorage.getItem('user-id');
+const RouteProtection = () => {
+  const newLocation = `${location}`;
+  const { userId } = useUsers();
   return (
     <>
-      {id ? (
-        <UserProvider>
-          <FavoriteProvider>
-            <Outlet />
-          </FavoriteProvider>
-        </UserProvider>
+      {userId ? (
+        <Layout>
+          <Outlet />
+        </Layout>
       ) : (
-        <Navigate to="/login" />
+        <Navigate to="/login" state={{ from: newLocation }} replace />
       )}
     </>
   );
 };
+
+export default RouteProtection;

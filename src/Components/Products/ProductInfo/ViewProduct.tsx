@@ -8,15 +8,15 @@ import { Button, Rating, Stack } from '@mui/material';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import type { Product } from '../ViewAllProducts/ViewAllProducts';
+import type { Product } from '../../../Types/ProductType';
 import { Box } from '@mui/material';
-import Navbar from '../Navbar/Navbar';
+import Navbar from '../../Navbar/Navbar';
 import { useFavorite } from './FavoritesProvider';
-import { useUsers } from '../Auth/userProvider';
-import { getData, setData } from '../../Store/Store';
-import type { User } from '../Types/UserType';
+import { useUsers } from '../../Auth/userProvider';
+import { getData, setData } from '../../../Store/Store';
+import type { User } from '../../../Types/UserType';
 
-export const ViewProduct = () => {
+const ViewProduct = () => {
   const { productId } = useParams();
   const { userId } = useUsers();
   const [productData, setProductData] = useState<Product>();
@@ -154,3 +154,5 @@ export const ViewProduct = () => {
     </>
   );
 };
+
+export default ViewProduct;

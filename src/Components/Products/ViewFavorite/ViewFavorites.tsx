@@ -4,14 +4,14 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, Stack } from '@mui/material';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import Navbar from '../Navbar/Navbar';
-import { useUsers } from '../Auth/userProvider';
-import { getData, setData } from '../../Store/Store';
-import type { User } from '../Types/UserType';
-import { useFavorite } from '../ViewProduct/FavoritesProvider';
-import type { Product } from '../ViewAllProducts/ViewAllProducts';
+import Navbar from '../../Navbar/Navbar';
+import { useUsers } from '../../Auth/userProvider';
+import { getData, setData } from '../../../Store/Store';
+import type { User } from '../../../Types/UserType';
+import { useFavorite } from '../ProductInfo/FavoritesProvider';
+import type { Product } from '../../../Types/ProductType';
 
-export default function ViewFavorites() {
+function ViewFavorites() {
   const { userId } = useUsers();
   const { favorites, setFavorites } = useFavorite();
 
@@ -101,3 +101,5 @@ export default function ViewFavorites() {
     </div>
   );
 }
+
+export default ViewFavorites;

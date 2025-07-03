@@ -1,4 +1,4 @@
-import type { User } from '../Components/Types/UserType';
+import type { User } from '../Types/UserType';
 
 export function getData() {
   return JSON.parse(localStorage.getItem('users-array') as string) || [];
