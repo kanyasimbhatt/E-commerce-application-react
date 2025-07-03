@@ -19,6 +19,7 @@ type ProductCardProps = {
   handleShare: (productId: number) => void;
   productIdSelected: number;
   setShowShare: React.Dispatch<React.SetStateAction<boolean>>;
+  handleClickOnProduct: (productId: string) => void;
 };
 
 const ProductCard = ({
@@ -27,6 +28,7 @@ const ProductCard = ({
   handleShare,
   productIdSelected,
   setShowShare,
+  handleClickOnProduct,
 }: ProductCardProps) => {
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -80,7 +82,12 @@ const ProductCard = ({
           </DialogContent>
         </BootstrapDialog>
 
-        <Button size="small">Learn More</Button>
+        <Button
+          size="small"
+          onClick={() => handleClickOnProduct(`${product.id}`)}
+        >
+          Learn More
+        </Button>
       </CardActions>
     </Card>
   );

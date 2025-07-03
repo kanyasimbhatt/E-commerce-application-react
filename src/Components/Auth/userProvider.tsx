@@ -9,12 +9,12 @@ const UserContext = createContext<UsersArrayType>({
   setUserId: () => {},
 });
 
-type ChildrenType = {
+type UserProviderProps = {
   children: React.ReactNode;
 };
 
-export const UserProvider: React.FC<ChildrenType> = ({ children }) => {
-  const userData = localStorage.getItem('user-id') || '';
+export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
+  const userData = JSON.parse(localStorage.getItem('user-id') as string) || '';
   const [userId, setUserId] = useState<string>(userData);
   return (
     <UserContext.Provider value={{ userId, setUserId }}>

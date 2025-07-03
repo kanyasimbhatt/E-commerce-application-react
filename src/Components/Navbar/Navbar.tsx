@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { useNavigate } from 'react-router-dom';
@@ -26,6 +27,10 @@ export default function Navbar() {
     localStorage.removeItem('user-id');
     handleClose();
     navigate('/login');
+  };
+
+  const handleClickOnFavorites = () => {
+    navigate('/favorites');
   };
   return (
     <Box sx={{ flexGrow: 1, position: 'fixed', top: 0, width: '100%' }}>
@@ -50,6 +55,9 @@ export default function Navbar() {
           </Typography>
 
           <div>
+            <IconButton onClick={handleClickOnFavorites}>
+              <FavoriteIcon sx={{ color: 'white' }} />
+            </IconButton>
             <IconButton
               size="large"
               aria-label="account of current user"
